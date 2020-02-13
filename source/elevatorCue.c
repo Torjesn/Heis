@@ -2,14 +2,16 @@
 
 const int g_number_of_floors = 4;
 
+//antar floor er 1-indeksert, 
 void remove_orders_current_floor(int floor, int cue_order_up[], int cue_order_down[], int cue_order_inside[]) {
-    decrement_array_over_limit(cue_order_up, cue_order_up[floor], g_number_of_floors);
-    decrement_array_over_limit(cue_order_down, cue_order_down[floor], g_number_of_floors);
-    decrement_array_over_limit(cue_order_inside, cue_order_inside[floor],g_number_of_floors);
+    int floor_array = floor-1;
+    decrement_array_over_limit(cue_order_up, cue_order_up[floor_array], g_number_of_floors);
+    decrement_array_over_limit(cue_order_down, cue_order_down[floor_array], g_number_of_floors);
+    decrement_array_over_limit(cue_order_inside, cue_order_inside[floor_array],g_number_of_floors);
     
-    cue_order_up[floor] = 0;
-    cue_order_down[floor] = 0;
-    cue_order_inside[floor] = 0;
+    cue_order_up[floor_array] = 0;
+    cue_order_down[floor_array] = 0;
+    cue_order_inside[floor_array] = 0;
 }
 
 void decrement_array_over_limit(int array[], int limit, int length) {
