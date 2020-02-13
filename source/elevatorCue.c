@@ -3,6 +3,19 @@
 const int g_number_of_floors = 4; //kanskje ikke et g prefix?
 
 //antar floor er 1-indeksert, 
+
+typedef struct {
+    int queue_count_outside = 0;
+    int queue_count_inside = 0;
+    int queue_order_up[] = {0,0,0,0}; //kan eventuelt ha tre her, gjør aksessering enklere med fire
+    int queue_order_down[] = {0,0,0,0}; // -||-
+    int queue_order_inside[] = {0,0,0,0};
+    int destination = 0;
+    int current_floor = 0;
+    HardwareMovement motor_state = HARDWARE_MOVEMENT_STOP;
+} queueState;
+
+
 void remove_orders_current_floor(int floor, int queue_order_up[], int queue_order_down[], int queue_order_inside[]) {
     int floor_array = floor-1;
     decrement_array_over_limit(queue_order_up, queue_order_up[floor_array], g_number_of_floors);
@@ -87,36 +100,6 @@ void get_elevator_input( int *p_queue_count_outside, int *p_queue_count_inside, 
         }
     }
 }
-
-typedef
-
-typedef struct {
-    int queue_count_outside = 0;
-    int queue_count_inside = 0;
-    int queue_order_up[] = {0,0,0,0}; //kan eventuelt ha tre her, gjør aksessering enklere med fire
-    int queue_order_down[] = {0,0,0,0}; // -||-
-    int queue_order_inside[] = {0,0,0,0};
-    int destination = 0;
-    int current_floor = 0;
-    HardwareMovement motor_state = HARDWARE_MOVEMENT_STOP;
-} queueState;
-
-
-void driver() { //ja, den skal hete noe annet enn driver ;)
-
-    
-
-
-    while(1) {
-        get_elevator_input(&queue_count_outside, queue_order_up);
-
-    }
-}
-
-
-
-
-
 
 void set_state(HardwareMovement * p_motor_state, int destination, int current_floor) { 
     if (current_floor > destination) *p_motor_state = HARDWARE_MOVEMENT_DOWN;
