@@ -1,6 +1,6 @@
 #include "hardware.h"
 
-const int g_number_of_floors = 4;
+const int g_number_of_floors = 4; //kanskje ikke et g prefix?
 
 //antar floor er 1-indeksert, 
 void remove_orders_current_floor(int floor, int cue_order_up[], int cue_order_down[], int cue_order_inside[]) {
@@ -24,19 +24,19 @@ void get_next_destination(int cue_order_up[],int cue_order_down[], int cue_order
     
     for(int i = 0; i< g_number_of_floors; ++i) {
         if (cue_order_inside[i] == 1) {
-            return i;
+            return i+1;
             
             decrement_array_over_limit(cue_order_inside, 0, g_number_of_floors);
         }
     }
     for(int i = 0; i< g_number_of_floors; ++i) {
         if (cue_order_up[i] == 1) {
-            return i;
+            return i+1;
             decrement_array_over_limit(cue_order_up, 0, g_number_of_floors);
             decrement_array_over_limit(cue_order_down, 0, g_number_of_floors);
         }
         if (cue_order_down[i] == 1) {
-            return i;
+            return i+1;
             decrement_array_over_limit(cue_order_up, 0, g_number_of_floors);
             decrement_array_over_limit(cue_order_down, 0, g_number_of_floors);
         }
@@ -66,41 +66,6 @@ int read_floor() {
     return 0;
 }
 
-
-//Kan smelte sammen disse tre til en funksjon
-/*void get_elevator_up_input(int *p_cue_count_outside, int cue_order_up[]) {
-    for (int i = 0; i < number_of_floors-1; ++i) {
-        if(hardware_read_order(i+1, HARDWARE_ORDER_UP)) {
-            if(cue_order_up[i] == 0) {
-                cue_order_up[i] = *p_cue_count_outside+1;
-                *p_cue_count_outside++;
-            }
-        }
-    }
-}
-    
-void get_elevator_down_input(int *p_cue_count_outside, int cue_order_down[]) {
-   for (int i = 1; i < number_of_floors; ++i) {
-        if(hardware_read_order(i+1, HARDWARE_ORDER_DOWN)) { 
-            if(cue_order_down[i] == 0) {
-                cue_order_down[i] = *p_cue_count_outside+1;
-                *p_cue_count_outside++;
-            }
-        }
-    }
-}   
-    
-void get_elevator_inside_input(int *p_cue_count_inside, int cue_order_inside[]) {  
-    for (int i = 0; i < number_of_floors; ++i) {
-        if(hardware_read_order(i+1, HARDWARE_ORDER_INSIDE)) {
-            if(cue_order_inside[i] == 0) {
-                cue_order_inside[i] = *p_cue_count_inside+1;
-                *p_cue_count_inside++;
-            }
-        }
-    }
-}*/
-
 void get_elevator_input( int *p_cue_count_outside, int *p_cue_count_inside, int cue_order_up[], int cue_order_down[], int cue_order_inside[]) {  
     for (int i = 0; i < g_number_of_floors; ++i) {
         if(hardware_read_order(i+1, HARDWARE_ORDER_UP)) {
@@ -125,11 +90,7 @@ void get_elevator_input( int *p_cue_count_outside, int *p_cue_count_inside, int 
 
 typedef
 
-typedef struct 
-
-
-void driver() { //ja, den skal hete noe annet enn driver ;)
-
+typedef struct {
     int cue_count_outside = 0;
     int cue_count_inside = 0;
     int cue_order_up[] = {0,0,0,0}; //kan eventuelt ha tre her, gjør aksessering enklere med fire
@@ -138,6 +99,12 @@ void driver() { //ja, den skal hete noe annet enn driver ;)
     int destination = 0;
     int current_floor = 0;
     HardwareMovement motor_state = HARDWARE_MOVEMENT_STOP;
+} cueState;
+
+
+void driver() { //ja, den skal hete noe annet enn driver ;)
+
+    
 
 
     while(1) {
