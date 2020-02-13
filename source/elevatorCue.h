@@ -4,7 +4,22 @@
 
 */
 
+//DISCLAIMER
+//Some of the smaller functions should possibly not be here, we should ask on tuesday
+
 #include "hardware.h"
+
+typedef struct {
+    int count_outside = 0;
+    int count_inside = 0;
+    int order_up[] = {0,0,0,0}; //kan eventuelt ha tre her, gjør aksessering enklere med fire
+    int order_down[] = {0,0,0,0}; // -||-
+    int order_inside[] = {0,0,0,0};
+    int destination = -1;
+    int current_floor = -1; //antar floor er 1-indeksert
+    HardwareMovement motor_state = HARDWARE_MOVEMENT_STOP;
+} queueState;
+ //set dox på denne
 
 /**
  * @brief Removes the orders of the current floor, and decrement the queues
@@ -13,8 +28,7 @@
  * @param[in,out] queue_order_inside The inside order queue with the current floor removed
 
 */
-
-void remove_orders_current_floor(int floor, int queue_order_up[], int queue_order_down[], int queue_order_inside[]);
+void remove_orders_current_floor(queueState * queue);
 
 
 
@@ -32,11 +46,10 @@ void decrement_array_over_limit(int array[], int limit, int length);
  * @param[in,out] queue_order_up The up order queue decremented by one if next destination
  * @param[in,out] queue_order_dowm The down order queue decremented bye one if next destination
  * @param[in,out] queue_order_inside The inside order queue decremented by one if next destination
- * @return next_flor Return the next floor, 0 if there are none requests pending
- //Ikke skrevet ferdig
+ * @return next_floor Return the next floor, -1 if there are none requests pending
 */
 
-void get_next_destination(int queue_order_up[],int queue_order_down[], int queue_order_inside[]);
+void get_next_destination(queueState * queue);
 
 
 /**
@@ -46,21 +59,31 @@ void get_next_destination(int queue_order_up[],int queue_order_down[], int queue
  * @param[in] queue_order_inside The inside order queue 
  * @param[in] floor The current floor
  * @param[in] motor_state The current direction of the motor
- * @return stop Returns 1 if the motor should stop, 0 otherwise
+ * @return floor Returns the number of the floor, or -1 as default
+ 
 */
-int check_if_stop_floor(int floor, int queue_order_up[], int queue_order_down[], int queue_order_inside[], HardwareMovement motor_state);
+int check_if_stop_floor();
 
 /**
  * @brief Polls input from harware and returns the current floor
- * @return floor Returns the number of the floor, or 0 as default
- //0 as default burde kanskje endres
+ * @return Stop Returns 1 if the elevator should stop at a floor, 0 otherwise
 */
 int read_floor();
 
-void get_elevator_input( int *p_queue_count_outside, int *p_queue_count_inside, int queue_order_up[], int queue_order_down[], int queue_order_inside[]);
 
+/**
+ * @brief Sets the elevator input on one of the queue arrays. Increments the following queue count.
+ * @param[out] queue_order_up If up_button is pressed on a floor, it is set with the 
+ * incremented count number in the cue if it is not in the queue
+ * @param[out] queue_order_down If down_button is pressed on a floor, it is set with the 
+ * incremented count number in the cue if it is not in the queue
+ * @param[out] queue_order_inside If down_button is pressed on a floor, it is set with the 
+ * incremented count number in the cue if it is not in the queue
+ * @param[in, out] queue_count_outside Incremented by one if a request is put in the outside queue
+ * @param[in, out] queue_count_inside Incremented by one if a request is put in the inside queue
+*/
 
-void get_elevator_up_input(int *p_queue_count_outside, int queue_order_up[]);
+void get_elevator_input( queueState * queue);
 
 
 /**
@@ -68,6 +91,6 @@ void get_elevator_up_input(int *p_queue_count_outside, int queue_order_up[]);
  * @param[out] p_motor_state Reference to motor state, changed based on the other parameters
  * @param[in] destination The next place the elevator is heading
  * @param[in] current_floor The current floor measured by hardware
- 
-*/
-void set_state(HardwareMovement * p_motor_state, int destination, int current_floor)
+ */
+void set_state(queueState * queue)
+
