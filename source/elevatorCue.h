@@ -7,19 +7,19 @@
 #include "hardware.h"
 
 /**
- * @brief Removes the orders of the current floor, and decrement the cues
- * @param[in,out] cue_order_up The up order cue with the current floor removed
- * @param[in,out] cue_order_down The down order cue with the current floor removed
- * @param[in,out] cue_order_inside The inside order cue with the current floor removed
+ * @brief Removes the orders of the current floor, and decrement the queues
+ * @param[in,out] queue_order_up The up order queue with the current floor removed
+ * @param[in,out] queue_order_down The down order queue with the current floor removed
+ * @param[in,out] queue_order_inside The inside order queue with the current floor removed
 
 */
 
-void remove_orders_current_floor(int floor, int cue_order_up[], int cue_order_down[], int cue_order_inside[]);
+void remove_orders_current_floor(int floor, int queue_order_up[], int queue_order_down[], int queue_order_inside[]);
 
 
 
 /**
- * @brief Decrements the values of an array over a chosen limit, used for manipulating cues
+ * @brief Decrements the values of an array over a chosen limit, used for manipulating queues
  * @param[in,out] array The array being decremented
  * @param[in] limit Numbers bigger than this limit is decremented by one in the array
  * @param[in] length The size of the array
@@ -28,27 +28,27 @@ void remove_orders_current_floor(int floor, int cue_order_up[], int cue_order_do
 void decrement_array_over_limit(int array[], int limit, int length);
 
 /**
- * @brief Choses the next destination of the elevator. The inside cue is prioritized over the the outside ones
- * @param[in,out] cue_order_up The up order cue decremented by one if next destination
- * @param[in,out] cue_order_dowm The down order cue decremented bye one if next destination
- * @param[in,out] cue_order_inside The inside order cue decremented by one if next destination
+ * @brief Choses the next destination of the elevator. The inside queue is prioritized over the the outside ones
+ * @param[in,out] queue_order_up The up order queue decremented by one if next destination
+ * @param[in,out] queue_order_dowm The down order queue decremented bye one if next destination
+ * @param[in,out] queue_order_inside The inside order queue decremented by one if next destination
  * @return next_flor Return the next floor, 0 if there are none requests pending
  //Ikke skrevet ferdig
 */
 
-void get_next_destination(int cue_order_up[],int cue_order_down[], int cue_order_inside[]);
+void get_next_destination(int queue_order_up[],int queue_order_down[], int queue_order_inside[]);
 
 
 /**
- * @brief Choses the next destination of the elevator. The inside cue is prioritized over the the outside ones
- * @param[in] cue_order_up The up order cue 
- * @param[in] cue_order_dowm The down order cue
- * @param[in] cue_order_inside The inside order cue 
+ * @brief Choses the next destination of the elevator. The inside queue is prioritized over the the outside ones
+ * @param[in] queue_order_up The up order queue 
+ * @param[in] queue_order_dowm The down order queue
+ * @param[in] queue_order_inside The inside order queue 
  * @param[in] floor The current floor
  * @param[in] motor_state The current direction of the motor
  * @return stop Returns 1 if the motor should stop, 0 otherwise
 */
-int check_if_stop_floor(int floor, int cue_order_up[], int cue_order_down[], int cue_order_inside[], HardwareMovement motor_state);
+int check_if_stop_floor(int floor, int queue_order_up[], int queue_order_down[], int queue_order_inside[], HardwareMovement motor_state);
 
 /**
  * @brief Polls input from harware and returns the current floor
@@ -57,10 +57,10 @@ int check_if_stop_floor(int floor, int cue_order_up[], int cue_order_down[], int
 */
 int read_floor();
 
-void get_elevator_input( int *p_cue_count_outside, int *p_cue_count_inside, int cue_order_up[], int cue_order_down[], int cue_order_inside[]);
+void get_elevator_input( int *p_queue_count_outside, int *p_queue_count_inside, int queue_order_up[], int queue_order_down[], int queue_order_inside[]);
 
 
-void get_elevator_up_input(int *p_cue_count_outside, int cue_order_up[]);
+void get_elevator_up_input(int *p_queue_count_outside, int queue_order_up[]);
 
 
 /**
