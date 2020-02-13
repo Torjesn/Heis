@@ -1,20 +1,7 @@
 #include "hardware.h"
+#include "elevatorCue.h"
 
 const int g_number_of_floors = 4; //kanskje ikke et g prefix?
-
-
-
-typedef struct {
-    int count_outside = 0;
-    int count_inside = 0;
-    int order_up[] = {0,0,0,0}; //kan eventuelt ha tre her, gjør aksessering enklere med fire
-    int order_down[] = {0,0,0,0}; // -||-
-    int order_inside[] = {0,0,0,0};
-    int destination = -1;
-    int current_floor = -1; //antar floor er 1-indeksert
-    HardwareMovement motor_state = HARDWARE_MOVEMENT_STOP;
-} queueState;
-
 
 void remove_orders_current_floor(queueState * queue) {
     int floor_array = queue->current_floor-1;
@@ -79,11 +66,11 @@ int read_floor() {
     return 0;
 }
 
-void get_elevator_input( queueState * queue) {  
+void get_elevator_input(queueState * queue) {  
     for (int i = 0; i < g_number_of_floors; ++i) {
         if(hardware_read_order(i+1, HARDWARE_ORDER_UP)) {
             if(queue->order_up[i] == 0) {
-                queue->order_up[i] = ++*p_queue_count_outside;
+                queue->order_up[i] = ++queue->count_outside;
             }
         }
 
