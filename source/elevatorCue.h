@@ -1,6 +1,6 @@
 /**
 * @file
-* @brief The cue system of the elevator
+* @brief The queue system of the elevator
 
 */
 
