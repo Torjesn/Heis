@@ -19,7 +19,7 @@ typedef struct {
     int destination = -1;
     int current_floor = -1; //antar floor er 1-indeksert
     HardwareMovement motor_state = HARDWARE_MOVEMENT_STOP;
-} queueState;
+} queueState; 
  //set dox på denne
 
 /**
@@ -54,20 +54,20 @@ void get_next_destination(queueState * queue);
 
 
 /**
- * @brief Choses the next destination of the elevator. The inside queue is prioritized over the the outside ones
+ * @brief Checks if the elevator should stop on the floor or not
  * @param[in] queue_order_up The up order queue 
  * @param[in] queue_order_dowm The down order queue
  * @param[in] queue_order_inside The inside order queue 
  * @param[in] floor The current floor
  * @param[in] motor_state The current direction of the motor
- * @return floor Returns the number of the floor, or -1 as default
+ * @return Stop Returns 1 if the elevator should stop at a floor, 0 otherwise
  
 */
 int check_if_stop_floor();
 
 /**
  * @brief Polls input from harware and returns the current floor
- * @return Stop Returns 1 if the elevator should stop at a floor, 0 otherwise
+ * @return floor Returns the number of the floor, or -1 as default
 */
 int read_floor();
 
