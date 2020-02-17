@@ -24,22 +24,25 @@ void get_next_destination(queueState * queue) {
     for(int i = 0; i< g_number_of_floors; ++i) {
         if (queue->order_inside[i] == 1) {
            decrement_array_over_limit(queue->order_inside, 0, g_number_of_floors);
-            return i+1;
+            queue->destination = i+1;
+            return;
         }
     }
     for(int i = 0; i< g_number_of_floors; ++i) {
         if (queue->order_up[i] == 1) {
             decrement_array_over_limit(queue->order_up, 0, g_number_of_floors);
             decrement_array_over_limit(queue->order_down, 0, g_number_of_floors);
-            return i+1;
+            queue->destination = i+1;
+            return;
         }
         if (queue->order_down[i] == 1) {
             decrement_array_over_limit(queue->order_up, 0, g_number_of_floors);
             decrement_array_over_limit(queue->order_down, 0, g_number_of_floors);
-            return i+1;
+            queue->destination = i+1;
+            return;
         }
     }
-    return -1;
+    queue->destination = -1;
 }
 
 int check_if_stop_floor(queueState* queue) {
@@ -89,7 +92,8 @@ void get_elevator_input(queueState * queue) {
 }
 
 void set_state(queueState *queue) { 
-    if (queue->current_floor > queue->destination) queue->motor_state = HARDWARE_MOVEMENT_DOWN;
+    if (queue->destination == -1) queue->motor_state = HARDWARE_MOVEMENT_STOP;
+    else if (queue->current_floor > queue->destination) queue->motor_state = HARDWARE_MOVEMENT_DOWN;
     else if (queue->current_floor < queue->destination) queue->motor_state = HARDWARE_MOVEMENT_UP;
     else queue->motor_state = HARDWARE_MOVEMENT_STOP; //Jeg vet ikke helt hvordan dette vil fungere, hva hvis man trykker på den samme i 
 }
