@@ -6,6 +6,7 @@
 
 //DISCLAIMER
 //Some of the smaller functions should possibly not be here, we should ask on tuesday
+//They should probably be set as static, and not included in headerfile
 
 #include "hardware.h"
 
@@ -92,5 +93,16 @@ void get_elevator_input( queueState * queue);
  * @param[in] destination The next place the elevator is heading
  * @param[in] current_floor The current floor measured by hardware
  */
-void set_state(queueState * queue)
+void set_state(queueState * queue);
+
+
+/**
+ * @brief Deletes the queue if stop button is pressed
+ * @param[out] p_motor_state If pressed, motor_state becomes idle
+ * @param[out] queue_order_up If pressed, the up_queue is set to zero
+ * @param[out] queue_order_down If pressed, the down_queue is set to zero
+ * @param[out] queue_order_inside If pressed, the inside_queue is set to zero
+ */
+void check_stop_signal(queueState *queue) {
+
 

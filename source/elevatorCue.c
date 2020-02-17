@@ -7,7 +7,7 @@ void remove_orders_current_floor(queueState * queue) {
     int floor_array = queue->current_floor-1;
     decrement_array_over_limit(queue->order_up, queue->order_up[floor_array], g_number_of_floors);
     decrement_array_over_limit(queue->order_down, queue->order_down[floor_array], g_number_of_floors);
-    decrement_array_over_limit(queue_order->inside, queue->order_inside[floor_array],g_number_of_floors);
+    decrement_array_over_limit(queue->order_inside, queue->order_inside[floor_array],g_number_of_floors);
     
     queue->order_up[floor_array] = 0;
     queue->order_down[floor_array] = 0;
@@ -94,4 +94,13 @@ void set_state(queueState *queue) {
     else queue->motor_state = HARDWARE_MOVEMENT_STOP; //Jeg vet ikke helt hvordan dette vil fungere, hva hvis man trykker på den samme i 
 }
 
-void check_stop_signal() {}
+void check_stop_signal(queueState *queue) {
+    if (hardware_read_stop_signal()) {
+        for (int i = 0; i < g_number_of_floors; ++i) {
+            queue->order_up[i] = 0;
+            queue->order_down[i] = 0;
+            queue->order_inside[i] = 0;
+        }
+        queue->motor_state = HARDWARE_MOVEMENT_STOP; //Kan være at denne dekkes andre plasser
+    }
+}
