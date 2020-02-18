@@ -10,6 +10,10 @@ static void start_procedure_elevator() {
     }
 }
 
+void set_lights(queueState * queue, int current_floor, DoorState * door, ) { 
+
+}
+
 void elevator_fsm() {
     start_procedure_elevator();
     
