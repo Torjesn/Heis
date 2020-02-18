@@ -46,7 +46,7 @@ void get_next_destination(queueState * queue) {
 }
 
 int check_if_stop_floor(queueState* queue) {
-    int floor_array = read_floor()-1;
+    int floor_array = read_floor()-1; //denna kan jo være negativ, gjør på en bedre måte
     if (floor_array >= 0 && floor_array < g_number_of_floors) {   //kanskje ikke nødvendig 
         if(
             queue->order_inside[floor_array] 
