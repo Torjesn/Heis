@@ -47,7 +47,7 @@ void get_next_destination(queueState * queue) {
 
 int check_if_stop_floor(queueState* queue) {
     int floor_array = read_floor()-1;
-    if (floor_array >= 0 && floor_array < g_number_of_floors) {   
+    if (floor_array >= 0 && floor_array < g_number_of_floors) {   //kanskje ikke nødvendig 
         if(
             queue->order_inside[floor_array] 
             || (queue->order_up[floor_array] && queue->motor_state ==  HARDWARE_MOVEMENT_UP) 
@@ -98,7 +98,7 @@ void set_state(queueState *queue) {
     else queue->motor_state = HARDWARE_MOVEMENT_STOP; //Jeg vet ikke helt hvordan dette vil fungere, hva hvis man trykker på den samme i 
 }
 
-void check_stop_signal(queueState *queue) {
+void delete_button_ queue(queueState *queue) {
     if (hardware_read_stop_signal()) {
         for (int i = 0; i < g_number_of_floors; ++i) {
             queue->order_up[i] = 0;
