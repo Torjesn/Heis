@@ -14,13 +14,15 @@ void elevator_fsm() {
     start_procedure_elevator();
     
     queueState * queue;
-    queue->current_floor = read_floor();
+    int current_floor = read_floor();
+    DoorState * door;
+    HardwareMovement * motor_state;//faktisk state til motor
     while (1) {
         get_elevator_input(queue);
         get_next_destination(queue);
-        set_motor_state(queue);
+        set_preferred_motor_state(queue);
         delete_button_queue(queue);
-        hardware_command_movement(queue->motor_state);
+        hardware_command_movement(queue->preferred_motor_state);
         int measured_floor = read_floor(); //her er det litt dårlige variabelnavn
         if (measured_floor != queue->current_floor) {
             check_if_stop_floor(queue); //her må det tenkes litt mer

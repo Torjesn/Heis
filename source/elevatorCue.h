@@ -18,7 +18,7 @@ typedef struct {
     int order_inside[] = {0,0,0,0};
     int destination = -1;
     int current_floor = -1; //antar floor er 1-indeksert
-    HardwareMovement motor_state = HARDWARE_MOVEMENT_STOP;
+    HardwareMovement preferred_motor_state = HARDWARE_MOVEMENT_STOP;
 } queueState; 
  //set dox på denne
 
@@ -59,7 +59,7 @@ void get_next_destination(queueState * queue);
  * @param[in] queue_order_dowm The down order queue
  * @param[in] queue_order_inside The inside order queue 
  * @param[in] floor The current floor
- * @param[in] motor_state The current direction of the motor
+ * @param[in] preferred_motor_state The current direction of the motor
  * @return Stop Returns 1 if the elevator should stop at a floor, 0 otherwise
  
 */
@@ -88,15 +88,15 @@ void get_elevator_input( queueState * queue);
 
 /**
  * @brief Sets the motor state based on destination and current floor
- * @param[out] p_motor_state Reference to motor state, changed based on the other parameters
+ * @param[out] p_preferred_motor_state Reference to motor state, changed based on the other parameters
  * @param[in] destination The next place the elevator is heading
  * @param[in] current_floor The current floor measured by hardware
  */
-void set_motor_state(queueState * queue);
+void set_preferred_motor_state(queueState * queue);
 
 /**
  * @brief Deletes the queue if stop button is pressed
- * @param[out] p_motor_state If pressed, motor_state becomes idle
+ * @param[out] p__preferred_motor_state If pressed, preferred_motor_state becomes idle
  * @param[out] queue_order_up If pressed, the up_queue is set to zero
  * @param[out] queue_order_down If pressed, the down_queue is set to zero
  * @param[out] queue_order_inside If pressed, the inside_queue is set to zero

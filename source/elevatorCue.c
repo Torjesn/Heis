@@ -50,8 +50,8 @@ int check_if_stop_floor(queueState* queue) {
     if (floor_array >= 0 && floor_array < g_number_of_floors) {   //kanskje ikke nødvendig 
         if(
             queue->order_inside[floor_array] 
-            || (queue->order_up[floor_array] && queue->motor_state ==  HARDWARE_MOVEMENT_UP) 
-            || (queue->order_down[floor_array] && queue->motor_state ==  HARDWARE_MOVEMENT_DOWN)
+            || (queue->order_up[floor_array] && queue->preferred_motor_state ==  HARDWARE_MOVEMENT_UP) 
+            || (queue->order_down[floor_array] && queue->preferred_motor_state ==  HARDWARE_MOVEMENT_DOWN)
         ) 
         {       
             //remove_orders_current_floor(queue);
@@ -68,6 +68,7 @@ int read_floor() {
     }
     return -1;
 }
+
 
 void get_elevator_input(queueState * queue) {  
     for (int i = 0; i < g_number_of_floors; ++i) {
@@ -91,11 +92,11 @@ void get_elevator_input(queueState * queue) {
     }
 }
 
-void set_motor_state(queueState *queue) { 
-    if (queue->destination == -1) queue->motor_state = HARDWARE_MOVEMENT_STOP;
-    else if (queue->current_floor > queue->destination) queue->motor_state = HARDWARE_MOVEMENT_DOWN;
-    else if (queue->current_floor < queue->destination) queue->motor_state = HARDWARE_MOVEMENT_UP;
-    else queue->motor_state = HARDWARE_MOVEMENT_STOP; //Jeg vet ikke helt hvordan dette vil fungere, hva hvis man trykker på den samme i 
+void set_preferred_motor_state(queueState *queue) { 
+    if (queue->destination == -1) queue->preferred_motor_state = HARDWARE_MOVEMENT_STOP;
+    else if (queue->current_floor > queue->destination) queue->preferred_motor_state = HARDWARE_MOVEMENT_DOWN;
+    else if (queue->current_floor < queue->destination) queue->preferred_motor_state = HARDWARE_MOVEMENT_UP;
+    else queue->preferred_motor_state = HARDWARE_MOVEMENT_STOP; //Jeg vet ikke helt hvordan dette vil fungere, hva hvis man trykker på den samme i 
 }
 
 void delete_button_queue(queueState *queue) {
@@ -106,6 +107,6 @@ void delete_button_queue(queueState *queue) {
         queue->count_outside = 0;
         queue->count_inside = 0;
     }
-    queue->motor_state = HARDWARE_MOVEMENT_STOP; //Kan være at denne dekkes andre plasser
+    queue->preferred_motor_state = HARDWARE_MOVEMENT_STOP; //Kan være at denne dekkes andre plasser
 }
 
