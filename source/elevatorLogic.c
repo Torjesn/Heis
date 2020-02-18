@@ -52,3 +52,4 @@ void open_dor {
     //evt setter lys
 }
 
+void write_to_motor() {}
