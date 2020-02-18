@@ -98,7 +98,7 @@ void set_state(queueState *queue) {
     else queue->motor_state = HARDWARE_MOVEMENT_STOP; //Jeg vet ikke helt hvordan dette vil fungere, hva hvis man trykker på den samme i 
 }
 
-void delete_button_ queue(queueState *queue) {
+void delete_button_queue(queueState *queue) {
     if (hardware_read_stop_signal()) {
         for (int i = 0; i < g_number_of_floors; ++i) {
             queue->order_up[i] = 0;
