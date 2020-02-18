@@ -91,17 +91,21 @@ void get_elevator_input(queueState * queue) {
     }
 }
 
+void set_motor_state(queueState *queue) { 
+    if (queue->destination == -1) queue->motor_state = HARDWARE_MOVEMENT_STOP;
+    else if (queue->current_floor > queue->destination) queue->motor_state = HARDWARE_MOVEMENT_DOWN;
+    else if (queue->current_floor < queue->destination) queue->motor_state = HARDWARE_MOVEMENT_UP;
+    else queue->motor_state = HARDWARE_MOVEMENT_STOP; //Jeg vet ikke helt hvordan dette vil fungere, hva hvis man trykker på den samme i 
+}
 
 void delete_button_queue(queueState *queue) {
-    if (hardware_read_stop_signal()) { //sannsynligvis fjern dette
-        for (int i = 0; i < g_number_of_floors; ++i) {
-            queue->order_up[i] = 0;
-            queue->order_down[i] = 0;
-            queue->order_inside[i] = 0;
-            queue->count_outside = 0;
-            queue->count_inside = 0;
-        }
-        queue->motor_state = HARDWARE_MOVEMENT_STOP; //Kan være at denne dekkes andre plasser
+    for (int i = 0; i < g_number_of_floors; ++i) {
+        queue->order_up[i] = 0;
+        queue->order_down[i] = 0;
+        queue->order_inside[i] = 0;
+        queue->count_outside = 0;
+        queue->count_inside = 0;
     }
+    queue->motor_state = HARDWARE_MOVEMENT_STOP; //Kan være at denne dekkes andre plasser
 }
 
