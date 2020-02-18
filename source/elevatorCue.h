@@ -24,7 +24,7 @@ typedef struct {
  //set dox på denne
 
 /**
- * @brief Initilize the queue
+ * @brief Initilizes the queue
  * @param[out] queue Queue-arrays set to zero, counters set to zero, 
  * destination, current_floor and prefered_motor_state set to deafult
 */
