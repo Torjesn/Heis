@@ -93,7 +93,7 @@ void get_elevator_input(queueState * queue) {
 
 
 void delete_button_queue(queueState *queue) {
-    if (hardware_read_stop_signal()) {
+    if (hardware_read_stop_signal()) { //sannsynligvis fjern dette
         for (int i = 0; i < g_number_of_floors; ++i) {
             queue->order_up[i] = 0;
             queue->order_down[i] = 0;
