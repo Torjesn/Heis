@@ -35,3 +35,20 @@ void elevator_fsm() {
 }
 
 
+int timer;
+void close_door(doorstate* door_state){
+    if (obstruksjon && stop) {
+        timer = 3;
+    }
+    if (timer == 0) {
+        door_state = door_open;
+    }
+}
+
+void open_dor {
+    //skjekker om motor er på
+    //skjekker om etage er gyldig
+    //sett dør til åpen
+    //evt setter lys
+}
+
