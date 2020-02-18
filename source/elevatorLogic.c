@@ -2,8 +2,6 @@
 #include "hardware.h"
 #include "elevatorLogic.h"
 
-int g_number_of_floors = 4;
-
 static void start_procedure_elevator() {
     int floor_level =  read_floor();
     while (floor_level == -1) {
@@ -103,6 +101,8 @@ void write_to_motor(queueState* queue, ElevatorState* elev_state) {
     hardware_command_movement(elev_state->movement);
 }
 
+
+// må lages, skal kalles hvis den skal stoppe.
 void stop_on_floor() {
 
 }
