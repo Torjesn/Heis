@@ -10,6 +10,7 @@
 
 #include "hardware.h"
 
+
 typedef struct {
     int count_outside = 0;
     int count_inside = 0;

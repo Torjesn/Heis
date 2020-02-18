@@ -6,6 +6,9 @@ typedef enum {
     DOOR_CLOSED
 } DoorState;
 
-
+typedef struct { 
+    DoorState door; 
+    int current_floor; 
+} ElevatorState; 
 
 //statene våre: doorState, hardwareMovement for motor
