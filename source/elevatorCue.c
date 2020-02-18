@@ -66,7 +66,7 @@ int read_floor() {
     for (int i = 1; i <= g_number_of_floors; ++i ) {
         if(hardware_read_floor_sensor(i)) return i;
     }
-    return 0;
+    return -1;
 }
 
 void get_elevator_input(queueState * queue) {  
@@ -104,7 +104,10 @@ void check_stop_signal(queueState *queue) {
             queue->order_up[i] = 0;
             queue->order_down[i] = 0;
             queue->order_inside[i] = 0;
+            queue->count_outside = 0;
+            queue->count_inside = 0;
         }
         queue->motor_state = HARDWARE_MOVEMENT_STOP; //Kan være at denne dekkes andre plasser
     }
 }
+
