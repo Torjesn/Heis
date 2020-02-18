@@ -86,16 +86,6 @@ int read_floor();
 
 void get_elevator_input( queueState * queue);
 
-
-/**
- * @brief Sets the motor state based on destination and current floor
- * @param[out] p_motor_state Reference to motor state, changed based on the other parameters
- * @param[in] destination The next place the elevator is heading
- * @param[in] current_floor The current floor measured by hardware
- */
-void set_state(queueState * queue);
-
-
 /**
  * @brief Deletes the queue if stop button is pressed
  * @param[out] p_motor_state If pressed, motor_state becomes idle
@@ -103,6 +93,6 @@ void set_state(queueState * queue);
  * @param[out] queue_order_down If pressed, the down_queue is set to zero
  * @param[out] queue_order_inside If pressed, the inside_queue is set to zero
  */
-void check_stop_signal(queueState *queue) {
+void delete_button_queue(queueState *queue) {
 
 
