@@ -10,6 +10,7 @@
 
 #include "hardware.h"
 
+
 typedef struct {
     int order_up[4]; //kan eventuelt ha tre her, gjør aksessering enklere med fire
     int order_down[4];

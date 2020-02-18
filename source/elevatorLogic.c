@@ -2,6 +2,7 @@
 #include "hardware.h"
 #include "elevatorLogic.h"
 
+int g_number_of_floors = 4;
 static void start_procedure_elevator() {
     int floor_level =  read_floor();
     while (floor_level == -1) {
@@ -10,8 +11,27 @@ static void start_procedure_elevator() {
     }
 }
 
-void set_lights(queueState * queue, int current_floor, DoorState * door, ) { 
-
+void set_lights(ElevatorState elevator, queueState * queue){ 
+    //setter stopp-lys: 
+    hardware_command_stop_light(hardware_read_stop_signal()); //hardware_read_stop_signal returnerer 0 hvis den er av, 1, hvis på og command skriver med samme verdier
+    //setter døra til åpen: 
+    if (elevator.door = DOOR_OPEN) {
+        hardware_command_door_open(1);
+    } else if(elevator.door = DOOR_CLOSED) {
+        hardware_command_door_open(0);
+    }
+    //setter order lights 
+    for (int i = 0; i < g_number_of_floors; i++)
+    {
+        int order_outside_length = 3;
+        int order_inside_length = 4;
+        //order opp
+        for (int j = 0; j < order_outside_length; j++)
+        {
+            hardware_command_order_light(i+1,HARDWARE_ORDER_UP, queue->order_up[i+1]);
+        }
+        
+    }
 }
 
 void elevator_fsm() {
