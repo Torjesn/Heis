@@ -3,6 +3,19 @@
 
 const int g_number_of_floors = 4; //kanskje ikke et g prefix?
 
+void init_queue_states(queueState * queue) {
+    for (int i = 0; i < g_number_of_floors; ++i) {
+         queue->order_up[i] = 0;
+         queue->order_down[i] = 0;
+         queue->order_inside[i] = 0;    
+    }
+    queue->count_outside = 0;
+    queue->count_inside = 0;
+    queue->destination = -1;
+    queue->current_floor = -1;
+    queue->preferred_motor_state = HARDWARE_MOVEMENT_STOP;
+}
+
 void remove_orders_current_floor(queueState * queue) {
     int floor_array = queue->current_floor-1;
     decrement_array_over_limit(queue->order_up, queue->order_up[floor_array], g_number_of_floors);

@@ -11,14 +11,14 @@
 #include "hardware.h"
 
 typedef struct {
-    int count_outside = 0;
-    int count_inside = 0;
-    int order_up[] = {0,0,0,0}; //kan eventuelt ha tre her, gjør aksessering enklere med fire
-    int order_down[] = {0,0,0,0}; // -||-
-    int order_inside[] = {0,0,0,0};
-    int destination = -1;
-    int current_floor = -1; //antar floor er 1-indeksert
-    HardwareMovement preferred_motor_state = HARDWARE_MOVEMENT_STOP;
+    int order_up[4]; //kan eventuelt ha tre her, gjør aksessering enklere med fire
+    int order_down[4];
+    int order_inside[4];
+    int count_outside;
+    int count_inside;
+    int destination;
+    int current_floor;
+    HardwareMovement preferred_motor_state;
 } queueState; 
  //set dox på denne
 

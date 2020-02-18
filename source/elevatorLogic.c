@@ -17,15 +17,24 @@ void set_lights(queueState * queue, int current_floor, DoorState * door, ) { 
 void elevator_fsm() {
     start_procedure_elevator();
     
-    queueState * queue;
+    queueState * queue; //Får kanskje ikek default-initialisert dette her?
     int current_floor = read_floor();
     DoorState * door;
     HardwareMovement * motor_state;//faktisk state til motor
     while (1) {
+        
+        if (hardware_read_stop_signal() ) {
+           *motor_state = HARDWARE_MOVEMENT_UP;
+            delete_button_queue(queue);
+            if (read_floor() > 0) {
+                *door = DOOR_OPEN;
+            }
+
+        } else {
+        
         get_elevator_input(queue);
         get_next_destination(queue);
         set_preferred_motor_state(queue);
-        delete_button_queue(queue);
         hardware_command_movement(queue->preferred_motor_state);
         int measured_floor = read_floor(); //her er det litt dårlige variabelnavn
         if (measured_floor != queue->current_floor) {
@@ -33,7 +42,7 @@ void elevator_fsm() {
             //her vil dørlogikk osv være, kan legge inn stop/running-bit
         }
         queue->current_floor = measured_floor; // setter 
-
+        }
     }
 
 
@@ -51,7 +60,8 @@ void close_door(doorstate* door_state){
     }
 }
 
-void open_dor {
+void open_dor(*motor_state) {
+    if (*motor)
     //skjekker om motor er på
     //skjekker om etage er gyldig
     //sett dør til åpen
