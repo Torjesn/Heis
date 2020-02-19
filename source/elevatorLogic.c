@@ -11,7 +11,7 @@ static void start_procedure_elevator() {
     }
 }
 
-void set_lights(ElevatorState elevator, queueState * queue){ 
+void set_lights(ElevatorState elevator, queueState * queue){
     //setter stopp-lys: 
     hardware_command_stop_light(hardware_read_stop_signal()); //hardware_read_stop_signal returnerer 0 hvis den er av, 1, hvis på og command skriver med samme verdier
     //setter døra til åpen: 
@@ -21,17 +21,23 @@ void set_lights(ElevatorState elevator, queueState * queue){ 
         hardware_command_door_open(0);
     }
     //setter order lights 
-    for (int i = 0; i < g_number_of_floors; i++)
-    {
-        int order_outside_length = 3;
-        int order_inside_length = 4;
-        //order opp
-        for (int j = 0; j < order_outside_length; j++)
+    int order_outside_length = 3;
+    int order_inside_length = 4;
+    //kølys inne
+    for (int i = 0; i < order_inside_length; i++)
         {
-            hardware_command_order_light(i+1,HARDWARE_ORDER_UP, queue->order_up[i+1]);
+            hardware_command_order_light(i+1,HARDWARE_ORDER_INSIDE,   queue->order_inside[i]);
         }
-        
-    }
+    //order opp
+    for (int i = 0; i < order_outside_length; i++)
+        {
+            hardware_command_order_light(i+1,HARDWARE_ORDER_UP, queue->order_up[i]);
+        }
+    //order ned 
+    for (int i = 0; i < order_outside_length; i++)
+        {
+            hardware_command_order_light(i+2, HARDWARE_ORDER_DOWN, queue->order_down[i+1]);
+        }
 }
 
 void elevator_fsm() {
@@ -71,7 +77,7 @@ void elevator_fsm() {
 
 
 int timer;
-void close_door(doorstate* door_state){
+void close_door(DoorState* door_state){
     if (obstruksjon && stop) {
         timer = 3;
     }
