@@ -48,7 +48,7 @@ void init_elevator_states(ElevatorState* elev_state) {
 
 
 
-void close_door(ElevatorState* elev_state, clock_t* real_time, clock_t* door_open_timer) {
+void try_close_door(ElevatorState* elev_state, clock_t* real_time, clock_t* door_open_timer) {
     if (hardware_read_obstruction_signal() || hardware_read_stop_signal()) {
         *door_open_timer += 3 * CLOCKS_PER_SEC;
     }
@@ -67,12 +67,6 @@ void open_door(ElevatorState* elev_state) {
     elev_state->door = DOOR_OPEN;
 }
 
-void change_door(ElevatorState* elev_state) {
-    if (elev_state->door == DOOR_OPEN) close_door(elev_state);
-    else open_door(elev_state);
-}
-
-
 void write_to_motor(queueState* queue, ElevatorState* elev_state) {
     if ( elev_state->door == DOOR_OPEN) elev_state->movement = HARDWARE_MOVEMENT_STOP;
     else elev_state->movement = elev_state->movement = queue->preferred_motor_state;
@@ -82,12 +76,8 @@ void write_to_motor(queueState* queue, ElevatorState* elev_state) {
 
 
 // må lages, skal kalles hvis den skal stoppe.
-<<<<<<< HEAD
-
-=======
 void stop_on_floor() {
     //fjern element fra køen 
     //åpne dør 
     //lukk dør 
 }
->>>>>>> 945e2bb22a15e415e02d518d360657bc81aa20fe
