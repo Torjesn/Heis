@@ -2,12 +2,11 @@
 #include "hardware.h"
 #include "elevatorLogic.h"
 
-int g_number_of_floors = 4;
 static void start_procedure_elevator() {
     int floor_level =  read_floor();
     while (floor_level == -1) {
         int floor_level =  read_floor();
-        hardware_command_movement(HARDWARE_MOVEMENT_DOWN);
+        hardware_command_movement(HARDWARE_MOVEMENT_DOWN); //kan denne være før, så den slipper å settes hele tiden?
     }
 }
 
@@ -43,55 +42,73 @@ void set_lights(ElevatorState elevator, queueState * queue){
 void elevator_fsm() {
     start_procedure_elevator();
     
-    queueState * queue; //Får kanskje ikek default-initialisert dette her?
-    int current_floor = read_floor();
-    DoorState * door;
-    HardwareMovement * motor_state;//faktisk state til motor
+    queueState * queue;
+    queue_default_init(queue);
+
+    ElevatorState * elev_state;
+    init_elevator_states(elev_state);
+    
     while (1) {
         
-        if (hardware_read_stop_signal() ) {
-           *motor_state = HARDWARE_MOVEMENT_UP;
-            delete_button_queue(queue);
-            if (read_floor() > 0) {
-                *door = DOOR_OPEN;
+        if (hardware_read_stop_signal() ) { //Ikke fulstendig gjennomtenkt, men burde fungere?
+           elev_state->movement = HARDWARE_MOVEMENT_STOP;
+            queue_delete_button(queue);
+            if (elev_state->current_floor > 0) {
+                elev_state->door = DOOR_OPEN;
             }
 
         } else {
         
-        get_elevator_input(queue);
+        get_elevator_input(queue); //Dette er bare funksjoner limt inn, ingen logikk
         get_next_destination(queue);
         set_preferred_motor_state(queue);
         hardware_command_movement(queue->preferred_motor_state);
-        int measured_floor = read_floor(); //her er det litt dårlige variabelnavn
-        if (measured_floor != queue->current_floor) {
-            check_if_stop_floor(queue); //her må det tenkes litt mer
-            //her vil dørlogikk osv være, kan legge inn stop/running-bit
+        check_if_stop_floor(queue);
         }
-        queue->current_floor = measured_floor; // setter 
-        }
-    }
+    }  
+}
 
-
-
+void init_elevator_states(ElevatorState* elev_state) {
+    elev_state->current_floor = -1;
+    elev_state->door = DOOR_CLOSED;
+    elev_state->movement = HARDWARE_MOVEMENT_STOP;
 }
 
 
 int timer;
-void close_door(DoorState* door_state){
-    if (obstruksjon && stop) {
+static void close_door(ElevatorState* elev_state) {
+    if (hardware_read_obstruction_signal() || hardware_read_stop_signal()) {
         timer = 3;
     }
     if (timer == 0) {
-        door_state = door_open;
+        elev_state->door = DOOR_CLOSED;
     }
 }
 
-void open_dor(*motor_state) {
-    if (*motor)
-    //skjekker om motor er på
-    //skjekker om etage er gyldig
-    //sett dør til åpen
-    //evt setter lys
+static void open_door(ElevatorState* elev_state) {
+    if (
+        elev_state->movement == HARDWARE_MOVEMENT_STOP
+        && elev_state->current_floor > 0
+    )
+    elev_state->door = DOOR_OPEN;
 }
 
-void write_to_motor() {}
+void change_door(ElevatorState* elev_state) {
+    if (elev_state->door == DOOR_OPEN) close_door(elev_state);
+    else open_door(elev_state);
+}
+
+
+
+void write_to_motor(queueState* queue, ElevatorState* elev_state) {
+    if ( elev_state->door == DOOR_OPEN) elev_state->movement = HARDWARE_MOVEMENT_STOP;
+    else elev_state->movement = elev_state->movement = queue->preferred_motor_state;
+    //kunne lagt til en på stopbutton, men dette vil aldri skje
+    hardware_command_movement(elev_state->movement);
+}
+
+
+// må lages, skal kalles hvis den skal stoppe.
+void stop_on_floor() {
+
+}

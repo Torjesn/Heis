@@ -1,9 +1,9 @@
 #include "hardware.h"
 #include "elevatorCue.h"
 
-const int g_number_of_floors = 4; //kanskje ikke et g prefix?
+//kanskje ikke et g prefix?
 
-void init_queue_states(queueState * queue) {
+void queue_default_init(queueState * queue) {
     for (int i = 0; i < g_number_of_floors; ++i) {
          queue->order_up[i] = 0;
          queue->order_down[i] = 0;
@@ -16,7 +16,13 @@ void init_queue_states(queueState * queue) {
     queue->preferred_motor_state = HARDWARE_MOVEMENT_STOP;
 }
 
-void remove_orders_current_floor(queueState * queue) {
+static void decrement_array_over_limit(int array[], int limit, int length) {
+    for (int i = 0; i < length; ++i) {
+        if(array[i] > limit) --array[i];
+    }
+}
+
+void queue_remove_orders_current_floor(queueState * queue) {
     int floor_array = queue->current_floor-1;
     decrement_array_over_limit(queue->order_up, queue->order_up[floor_array], g_number_of_floors);
     decrement_array_over_limit(queue->order_down, queue->order_down[floor_array], g_number_of_floors);
@@ -27,13 +33,9 @@ void remove_orders_current_floor(queueState * queue) {
     queue->order_inside[floor_array] = 0;
 }
 
-void decrement_array_over_limit(int array[], int limit, int length) {
-    for (int i = 0; i < length; ++i) {
-        if(array[i] > limit) --array[i];
-    }
-}
 
-void get_next_destination(queueState * queue) {
+
+void queue_get_next_destination(queueState * queue) {
     for(int i = 0; i< g_number_of_floors; ++i) {
         if (queue->order_inside[i] == 1) {
            decrement_array_over_limit(queue->order_inside, 0, g_number_of_floors);
@@ -58,8 +60,8 @@ void get_next_destination(queueState * queue) {
     queue->destination = -1;
 }
 
-int check_if_stop_floor(queueState* queue) {
-    int floor_array = read_floor()-1; //denna kan jo være negativ, gjør på en bedre måte
+int queue_check_if_stop_floor(queueState* queue) {
+    int floor_array = queue->current_floor-1; 
     if (floor_array >= 0 && floor_array < g_number_of_floors) {   //kanskje ikke nødvendig 
         if(
             queue->order_inside[floor_array] 
@@ -67,15 +69,13 @@ int check_if_stop_floor(queueState* queue) {
             || (queue->order_down[floor_array] && queue->preferred_motor_state ==  HARDWARE_MOVEMENT_DOWN)
         ) 
         {       
-            //remove_orders_current_floor(queue);
-            //usikker på om denne burde være her
             return 1;
         }
     }
     return 0;
 }
 
-int read_floor() {
+int read_floor() { //skal ikke være en medlemsfunksjon til queue, burde kanskje flyttes på
     for (int i = 1; i <= g_number_of_floors; ++i ) {
         if(hardware_read_floor_sensor(i)) return i;
     }
@@ -83,7 +83,7 @@ int read_floor() {
 }
 
 
-void get_elevator_input(queueState * queue) {  
+void queue_get_user_input(queueState * queue) {  
     for (int i = 0; i < g_number_of_floors; ++i) {
         if(hardware_read_order(i+1, HARDWARE_ORDER_UP)) {
             if(queue->order_up[i] == 0) {
@@ -105,21 +105,28 @@ void get_elevator_input(queueState * queue) {
     }
 }
 
-void set_preferred_motor_state(queueState *queue) { 
+void queue_set_preferred_motor_state(queueState *queue) { 
     if (queue->destination == -1) queue->preferred_motor_state = HARDWARE_MOVEMENT_STOP;
     else if (queue->current_floor > queue->destination) queue->preferred_motor_state = HARDWARE_MOVEMENT_DOWN;
     else if (queue->current_floor < queue->destination) queue->preferred_motor_state = HARDWARE_MOVEMENT_UP;
     else queue->preferred_motor_state = HARDWARE_MOVEMENT_STOP; //Jeg vet ikke helt hvordan dette vil fungere, hva hvis man trykker på den samme i 
 }
 
-void delete_button_queue(queueState *queue) {
+void queue_delete_button(queueState *queue) {
     for (int i = 0; i < g_number_of_floors; ++i) {
         queue->order_up[i] = 0;
         queue->order_down[i] = 0;
         queue->order_inside[i] = 0;
-        queue->count_outside = 0;
-        queue->count_inside = 0;
     }
+    queue->count_outside = 0;
+    queue->count_inside = 0;
     queue->preferred_motor_state = HARDWARE_MOVEMENT_STOP; //Kan være at denne dekkes andre plasser
+}
+
+void queue_get_current_floor(queueState * queue) {
+    int floor = read_floor();
+    if (floor > 0) {
+        queue->current_floor = floor;
+    }
 }
 

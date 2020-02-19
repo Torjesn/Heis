@@ -10,6 +10,7 @@
 
 #include "hardware.h"
 
+const int g_number_of_floors = 4; 
 
 typedef struct {
     int order_up[4]; //kan eventuelt ha tre her, gjør aksessering enklere med fire
@@ -24,24 +25,21 @@ typedef struct {
  //set dox på denne
 
 /**
+ * @brief Initilizes the queue
+ * @param[out] queue Queue-arrays set to zero, counters set to zero, 
+ * destination, current_floor and prefered_motor_state set to deafult
+*/
+void queue_default_init(queueState * queue);
+
+/**
  * @brief Removes the orders of the current floor, and decrement the queues
  * @param[in,out] queue_order_up The up order queue with the current floor removed
  * @param[in,out] queue_order_down The down order queue with the current floor removed
  * @param[in,out] queue_order_inside The inside order queue with the current floor removed
 
 */
-void remove_orders_current_floor(queueState * queue);
+void queue_remove_orders_current_floor(queueState * queue);
 
-
-
-/**
- * @brief Decrements the values of an array over a chosen limit, used for manipulating queues
- * @param[in,out] array The array being decremented
- * @param[in] limit Numbers bigger than this limit is decremented by one in the array
- * @param[in] length The size of the array
-
-*/
-void decrement_array_over_limit(int array[], int limit, int length);
 
 /**
  * @brief Choses the next destination of the elevator. The inside queue is prioritized over the the outside ones
@@ -51,7 +49,7 @@ void decrement_array_over_limit(int array[], int limit, int length);
  * @return next_floor Return the next floor, -1 if there are none requests pending
 */
 
-void get_next_destination(queueState * queue);
+void queue_get_next_destination(queueState * queue);
 
 
 /**
@@ -64,7 +62,7 @@ void get_next_destination(queueState * queue);
  * @return Stop Returns 1 if the elevator should stop at a floor, 0 otherwise
  
 */
-int check_if_stop_floor();
+int queue_check_if_stop_floor(queueState * queue);
 
 /**
  * @brief Polls input from harware and returns the current floor
@@ -85,7 +83,7 @@ int read_floor();
  * @param[in, out] queue_count_inside Incremented by one if a request is put in the inside queue
 */
 
-void get_elevator_input( queueState * queue);
+void queue_get_user_input(queueState * queue);
 
 /**
  * @brief Sets the motor state based on destination and current floor
@@ -93,7 +91,7 @@ void get_elevator_input( queueState * queue);
  * @param[in] destination The next place the elevator is heading
  * @param[in] current_floor The current floor measured by hardware
  */
-void set_preferred_motor_state(queueState * queue);
+void queue_set_preferred_motor_state(queueState * queue);
 
 /**
  * @brief Deletes the queue if stop button is pressed
@@ -102,6 +100,16 @@ void set_preferred_motor_state(queueState * queue);
  * @param[out] queue_order_down If pressed, the down_queue is set to zero
  * @param[out] queue_order_inside If pressed, the inside_queue is set to zero
  */
-void delete_button_queue(queueState *queue) {
+void queue_delete_button(queueState *queue);
+
+/** 
+ * @brief Sets the current_floor state of the queue. 
+ * Does not change between floors.
+ * @param[out] current_floor The current floor ofthe queue is set based on hardware.
+*/
+void queue_get_current_floor(queueState *queue);
+
+
+
 
 
