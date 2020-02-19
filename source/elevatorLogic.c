@@ -82,4 +82,12 @@ void write_to_motor(queueState* queue, ElevatorState* elev_state) {
 
 
 // må lages, skal kalles hvis den skal stoppe.
+<<<<<<< HEAD
 
+=======
+void stop_on_floor() {
+    //fjern element fra køen 
+    //åpne dør 
+    //lukk dør 
+}
+>>>>>>> 945e2bb22a15e415e02d518d360657bc81aa20fe
