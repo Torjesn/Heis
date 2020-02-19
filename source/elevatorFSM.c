@@ -17,14 +17,10 @@ void elevator_fsm() {
     clock_t door_open_timer = clock();
     
     while (1) {
+        real_time = clock();
         
         if (hardware_read_stop_signal() ) { //Ikke fulstendig gjennomtenkt, men burde fungere?
-           elev_state->movement = HARDWARE_MOVEMENT_STOP;
-            queue_delete_button(queue);
-            if (elev_state->current_floor > 0) {
-                elev_state->door = DOOR_OPEN;
-            }
-
+            stop_button_procedure(elev_state, queue);
         } else {
         
         get_elevator_input(queue); //Dette er bare funksjoner limt inn, ingen logikk
@@ -37,8 +33,16 @@ void elevator_fsm() {
 }
 
 
-static void stop_on_floor(ElevatorState* elev_state, clock_t* real_time, clock_t* door_open_timer) {
-    
-    *real_time = clock();
-    *door_open_timer = clock() + 3 * 
+static void stop_on_floor(ElevatorState* elev_state, clock_t* real_time, clock_t* door_open_timer, queueState* queue) {
+    *door_open_timer = clock() + 3 * CLOCKS_PER_SEC;
+    open_door(elev_state);
+    queue_remove_orders_current_floor(queue);
+}
+
+static void stop_button_procedure(ElevatorState* elev_state, queueState* queue) {
+    elev_state->movement = HARDWARE_MOVEMENT_STOP;
+    queue_delete_button(queue);
+    if (elev_state->current_floor > 0) {
+        elev_state->door = DOOR_OPEN;
+    }
 }
