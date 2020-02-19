@@ -10,7 +10,7 @@
 
 #include "hardware.h"
 
-extern const int g_number_of_floors = 4; 
+const int g_number_of_floors = 4; 
 
 typedef struct {
     int order_up[4]; //kan eventuelt ha tre her, gjør aksessering enklere med fire
