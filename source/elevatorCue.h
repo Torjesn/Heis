@@ -108,8 +108,3 @@ void queue_delete_button(queueState *queue);
  * @param[out] current_floor The current floor ofthe queue is set based on hardware.
 */
 void queue_get_current_floor(queueState *queue);
-
-
-
-
-
