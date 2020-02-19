@@ -11,13 +11,13 @@ static void start_procedure_elevator() {
     }
 }
 
-void set_lights(ElevatorState elevator, queueState * queue){
+void set_lights(ElevatorState* elev_state, queueState * queue){
     //setter stopp-lys: 
     hardware_command_stop_light(hardware_read_stop_signal()); //hardware_read_stop_signal returnerer 0 hvis den er av, 1, hvis på og command skriver med samme verdier
     //setter døra til åpen: 
-    if (elevator.door = DOOR_OPEN) {
+    if (elev_state->door = DOOR_OPEN) {
         hardware_command_door_open(1);
-    } else if(elevator.door = DOOR_CLOSED) {
+    } else if(elev_state->door = DOOR_CLOSED) {
         hardware_command_door_open(0);
     }
     //setter order lights 
@@ -26,7 +26,7 @@ void set_lights(ElevatorState elevator, queueState * queue){
     //kølys inne
     for (int i = 0; i < order_inside_length; i++)
         {
-            hardware_command_order_light(i+1,HARDWARE_ORDER_INSIDE,   queue->order_inside[i]);
+            hardware_command_order_light(i+1,HARDWARE_ORDER_INSIDE, queue->order_inside[i]);
         }
     //order opp
     for (int i = 0; i < order_outside_length; i++)

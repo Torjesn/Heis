@@ -38,15 +38,14 @@ void elevator_fsm() {
             stop_button_procedure(elev_state, queue);
         } else {
         
-        get_elevator_input(queue); //Dette er bare funksjoner limt inn, ingen logikk
-        get_next_destination(queue);
+        //kjøre-sekvens, egen funksjon? 
+        get_elevator_input(queue); 
+        get_next_destination(queue); //henter og setter kø
         set_preferred_motor_state(queue);
-        hardware_command_movement(queue->preferred_motor_state);
-        
+
         if (check_if_stop_floor(queue)) {
             stop_on_floor(elev_state, queue, door_open_timer);
         }
-        
         if (elev_state->door == DOOR_OPEN) {
             try_close_door(elev_state, real_time, door_open_timer); 
         }

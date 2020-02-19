@@ -16,6 +16,7 @@ typedef struct {
 
 //Må dokumentere funksjoner
 
+void write_to_motor(queueState* queue, ElevatorState* elev_state);
 /**
  * @brief Choses the next destination of the elevator. The inside queue is prioritized over the the outside ones
  * @param[in,out] queue_order_up The up order queue decremented by one if next destination
