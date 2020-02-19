@@ -73,13 +73,6 @@ int queue_check_if_stop_floor(queueState* queue) {
     return 0;
 }
 
-int read_floor() { //skal ikke være en medlemsfunksjon til queue, burde kanskje flyttes på
-    for (int i = 1; i <= g_number_of_floors; ++i ) {
-        if(hardware_read_floor_sensor(i)) return i;
-    }
-    return -1;
-}
-
 
 void queue_get_user_input(queueState * queue) {  
     for (int i = 0; i < g_number_of_floors; ++i) {
@@ -121,10 +114,5 @@ void queue_delete_button(queueState *queue) {
     queue->preferred_motor_state = HARDWARE_MOVEMENT_STOP; //Kan være at denne dekkes andre plasser
 }
 
-void queue_get_current_floor(queueState * queue) {
-    int floor = read_floor();
-    if (floor > 0) {
-        queue->current_floor = floor;
-    }
-}
+
 

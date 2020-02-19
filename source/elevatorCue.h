@@ -65,13 +65,6 @@ void queue_get_next_destination(queueState * queue);
 int queue_check_if_stop_floor(queueState * queue);
 
 /**
- * @brief Polls input from harware and returns the current floor
- * @return floor Returns the number of the floor, or -1 as default
-*/
-int read_floor();
-
-
-/**
  * @brief Sets the elevator input on one of the queue arrays. Increments the following queue count.
  * @param[out] queue_order_up If up_button is pressed on a floor, it is set with the 
  * incremented count number in the cue if it is not in the queue

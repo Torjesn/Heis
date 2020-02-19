@@ -91,3 +91,18 @@ void stop_button_procedure(ElevatorState* elev_state, queueState* queue) {
         elev_state->door = DOOR_OPEN;
     }
 }
+
+static int read_floor() { //skal ikke være en medlemsfunksjon til queue, burde kanskje flyttes på
+    for (int i = 1; i <= g_number_of_floors; ++i ) {
+        if(hardware_read_floor_sensor(i)) return i;
+    }
+    return -1;
+}
+
+void get_current_floor_state(queueState * queue) {
+    int floor = read_floor();
+    
+    if (floor > 0) {
+        queue->current_floor = floor;
+    }
+}

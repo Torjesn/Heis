@@ -30,14 +30,14 @@ void start_procedure_elevator();
  * @param [in] elev_state Door lights are set based on the door state
  */
 
-void set_lights(ElevatorState elevator, queueState * queue);
+void set_lights(ElevatorState * elevator, queueState * queue);
 
 
 /**
  * @brief Set the deafult elevator_states
- * @param[out] current_floor Set to deafult state, -1
- * @param[out] door Set to closed
- * @param[out] movement Set to stop
+ * @param[out] elev_state.current_floor Set to deafult state, -1
+ * @param[out] elev_state.door Set to closed
+ * @param[out] elev_state.movement Set to stop
  */
 void init_elevator_states(ElevatorState* elev_state);
 
@@ -85,4 +85,6 @@ void stop_on_floor(ElevatorState* elev_state, clock_t* door_open_timer, queueSta
  * @param[out] queue Deletes the queue
  * @param[out] elev_state.door Opens door if on floor
  */
-void stop_button_procedure(ElevatorState* elev_state, queueState* queue)
+void stop_button_procedure(ElevatorState* elev_state, queueState* queue);
+
+
