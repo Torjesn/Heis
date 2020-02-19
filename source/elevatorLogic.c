@@ -82,10 +82,3 @@ void write_to_motor(queueState* queue, ElevatorState* elev_state) {
     hardware_command_movement(elev_state->movement);
 }
 
-
-// må lages, skal kalles hvis den skal stoppe.
-void stop_on_floor() {
-    //fjern element fra køen 
-    //åpne dør 
-    //lukk dør 
-}

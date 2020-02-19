@@ -37,6 +37,7 @@ static void stop_on_floor(ElevatorState* elev_state, clock_t* real_time, clock_t
     *door_open_timer = clock() + 3 * CLOCKS_PER_SEC;
     open_door(elev_state);
     queue_remove_orders_current_floor(queue);
+
 }
 
 static void stop_button_procedure(ElevatorState* elev_state, queueState* queue) {
