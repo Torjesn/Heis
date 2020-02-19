@@ -38,6 +38,9 @@ void set_lights(ElevatorState elevator, queueState * queue){
         {
             hardware_command_order_light(i+2, HARDWARE_ORDER_DOWN, queue->order_down[i+1]);
         }
+    //etasjelys: //siden det er mutually exlusive så er det nok å skru på en av dem. 
+    hardware_command_floor_indicator_on(queue->current_floor);
+
 }
 
 void init_elevator_states(ElevatorState* elev_state) {
@@ -66,6 +69,7 @@ void open_door(ElevatorState* elev_state) {
     )
     elev_state->door = DOOR_OPEN;
 }
+
 
 void write_to_motor(queueState* queue, ElevatorState* elev_state) {
     if ( elev_state->door == DOOR_OPEN) elev_state->movement = HARDWARE_MOVEMENT_STOP;
