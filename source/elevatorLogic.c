@@ -40,38 +40,6 @@ void set_lights(ElevatorState elevator, queueState * queue){
         }
 }
 
-void elevator_fsm() {
-    start_procedure_elevator();
-    
-    queueState * queue;
-    queue_default_init(queue);
-
-    ElevatorState * elev_state;
-    init_elevator_states(elev_state);
-
-    clock_t real_time = clock();
-    clock_t door_open_timer = clock();
-    
-    while (1) {
-        
-        if (hardware_read_stop_signal() ) { //Ikke fulstendig gjennomtenkt, men burde fungere?
-           elev_state->movement = HARDWARE_MOVEMENT_STOP;
-            queue_delete_button(queue);
-            if (elev_state->current_floor > 0) {
-                elev_state->door = DOOR_OPEN;
-            }
-
-        } else {
-        
-        get_elevator_input(queue); //Dette er bare funksjoner limt inn, ingen logikk
-        get_next_destination(queue);
-        set_preferred_motor_state(queue);
-        hardware_command_movement(queue->preferred_motor_state);
-        check_if_stop_floor(queue);
-        }
-    }  
-}
-
 void init_elevator_states(ElevatorState* elev_state) {
     elev_state->current_floor = -1;
     elev_state->door = DOOR_CLOSED;
@@ -105,7 +73,6 @@ void change_door(ElevatorState* elev_state) {
 }
 
 
-
 void write_to_motor(queueState* queue, ElevatorState* elev_state) {
     if ( elev_state->door == DOOR_OPEN) elev_state->movement = HARDWARE_MOVEMENT_STOP;
     else elev_state->movement = elev_state->movement = queue->preferred_motor_state;
@@ -115,6 +82,4 @@ void write_to_motor(queueState* queue, ElevatorState* elev_state) {
 
 
 // må lages, skal kalles hvis den skal stoppe.
-void stop_on_floor() {
 
-}
