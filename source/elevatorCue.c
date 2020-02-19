@@ -1,8 +1,6 @@
 #include "hardware.h"
 #include "elevatorCue.h"
 
-//kanskje ikke et g prefix?
-
 void queue_default_init(queueState * queue) {
     for (int i = 0; i < g_number_of_floors; ++i) {
          queue->order_up[i] = 0;

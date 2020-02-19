@@ -1,6 +1,7 @@
 #include "elevatorCue.h"
 #include "hardware.h"
 #include "elevatorLogic.h"
+#include <time.h>
 
 static void start_procedure_elevator() {
     int floor_level =  read_floor();
@@ -47,6 +48,9 @@ void elevator_fsm() {
 
     ElevatorState * elev_state;
     init_elevator_states(elev_state);
+
+    clock_t real_time = clock();
+    clock_t door_open_timer = clock();
     
     while (1) {
         
@@ -75,17 +79,19 @@ void init_elevator_states(ElevatorState* elev_state) {
 }
 
 
-int timer;
-static void close_door(ElevatorState* elev_state) {
+
+void close_door(ElevatorState* elev_state, clock_t* real_time, clock_t* door_open_timer) {
     if (hardware_read_obstruction_signal() || hardware_read_stop_signal()) {
-        timer = 3;
+        *door_open_timer += 3 * CLOCKS_PER_SEC;
     }
-    if (timer == 0) {
+    if (*real_time >= *door_open_timer ) {
         elev_state->door = DOOR_CLOSED;
+        *door_open_timer = clock();
     }
+    *real_time = clock();
 }
 
-static void open_door(ElevatorState* elev_state) {
+void open_door(ElevatorState* elev_state) {
     if (
         elev_state->movement == HARDWARE_MOVEMENT_STOP
         && elev_state->current_floor > 0
