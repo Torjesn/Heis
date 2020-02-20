@@ -93,7 +93,7 @@ void stop_button_procedure(ElevatorState* elev_state, queueState* queue) {
 }
 
 static int read_floor() {
-    for (int i = 1; i <= g_number_of_floors; ++i ) {
+    for (int i = 1; i <= NUMBER_OF_FLOORS; ++i ) {
         if(hardware_read_floor_sensor(i)) return i;
     }
     return -1;

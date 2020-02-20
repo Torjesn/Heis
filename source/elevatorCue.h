@@ -10,10 +10,10 @@
 
 #include "hardware.h"
 #define NUMBER_OF_FLOORS 4
-//#define NUMBER_OF_OUTSIDE_BUTTONS 3
-//#define DOWN_BUTTON_OFFSETT 1
 #define ARRAY_OFFSETT 1
-const int g_number_of_floors = 4; 
+#define DEFAULT_DESTINATION -1
+//#define NUMBER_OF_OUTSIDE_BUTTONS 3
+//#define DOWN_BUTTON_OFFSETT 1 
 
 /**
  * @brief  A struct to keep the different parts of the queue in order 

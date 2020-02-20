@@ -9,7 +9,7 @@ void queue_default_init(queueState * queue) {
     }
     queue->count_outside = 0;
     queue->count_inside = 0;
-    queue->destination = -1;
+    queue->destination = DEFAULT_DESTINATION;
     queue->preferred_motor_state = HARDWARE_MOVEMENT_STOP;
 }
 
@@ -21,9 +21,9 @@ static void decrement_array_over_limit(int array[], int limit, int length) {
 
 void queue_remove_orders_current_floor(queueState * queue) {
     int floor_array = queue->current_floor-ARRAY_OFFSETT;
-    decrement_array_over_limit(queue->order_up, queue->order_up[floor_array], g_number_of_floors);
-    decrement_array_over_limit(queue->order_down, queue->order_down[floor_array], g_number_of_floors);
-    decrement_array_over_limit(queue->order_inside, queue->order_inside[floor_array],g_number_of_floors);
+    decrement_array_over_limit(queue->order_up, queue->order_up[floor_array],NUMBER_OF_FLOORS);
+    decrement_array_over_limit(queue->order_down, queue->order_down[floor_array], NUMBER_OF_FLOORS);
+    decrement_array_over_limit(queue->order_inside, queue->order_inside[floor_array], NUMBER_OF_FLOORS);
     
     queue->order_up[floor_array] = 0;
     queue->order_down[floor_array] = 0;
@@ -52,8 +52,8 @@ void queue_get_next_destination(queueState * queue) {
 }
 
 int queue_check_if_stop_floor(queueState* queue) {
-    int floor_array = queue->current_floor-ARRAY_OFFSETT; 
-    if (floor_array >= 0 && floor_array < g_number_of_floors) {   //kanskje ikke nødvendig 
+    int floor_array = queue->current_floor-ARRAY_OFFSETT; //burde hete noe annet enn floor_array
+    if (floor_array >= 0 && floor_array < NUMBER_OF_FLOORS) {   //kanskje ikke nødvendig 
         if(
             queue->order_inside[floor_array] 
             || (queue->order_up[floor_array] && queue->preferred_motor_state ==  HARDWARE_MOVEMENT_UP) 
@@ -90,7 +90,7 @@ void queue_get_user_input(queueState * queue) {
 }
 
 void queue_set_preferred_motor_state(queueState *queue) { 
-    if (queue->destination == -1) queue->preferred_motor_state = HARDWARE_MOVEMENT_STOP;
+    if (queue->destination == DEFAULT_DESTINATION) queue->preferred_motor_state = HARDWARE_MOVEMENT_STOP;
     else if (queue->current_floor > queue->destination) queue->preferred_motor_state = HARDWARE_MOVEMENT_DOWN;
     else if (queue->current_floor < queue->destination) queue->preferred_motor_state = HARDWARE_MOVEMENT_UP;
     else queue->preferred_motor_state = HARDWARE_MOVEMENT_STOP;

@@ -26,11 +26,10 @@ void elevator_fsm() {
         
         if (hardware_read_stop_signal() ) { 
             stop_button_procedure(elev_state, queue);
-            set_lights(elev_state, queue);
         } else {
-            queue_get_elevator_input(queue);
             
-            if (queue_check_if_stop_floor(queue) || queue->destination == -1) {
+            queue_get_elevator_input(queue);
+            if (queue_check_if_stop_floor(queue) || queue->destination == DEFAULT_DESTINATION) {
                 stop_on_floor(elev_state, queue, door_open_timer);
             }
             write_to_motor(queue, elev_state);
