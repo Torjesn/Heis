@@ -17,6 +17,8 @@ const int g_number_of_floors = 4;
 
 /**
  * @brief  A struct to keep the different parts of the queue in order 
+ * @warning order_up and order_down are arrays of four elements, 
+ * even though order_up[3] and and order_down[0] are not valid. 
  * */ 
 typedef struct {
     int order_up[NUMBER_OF_FLOORS]; /** < Array for the orders going up from the outside */

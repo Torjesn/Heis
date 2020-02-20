@@ -101,11 +101,7 @@ static int read_floor() {
 
 
 //burde ikke denne ligge i queue? denne er jo til og med i h-fila til queue
-<<<<<<< HEAD
 void get_current_floor_state(ElevatorState *elev_state, queueState * queue) {
-=======
-void get_current_floor_state(ElevatorState * elev_state, queueState * queue) {
->>>>>>> 0f7a1c618feae170d6fc24e3401d6844eda0f68f
     int floor = read_floor();
     elev_state->current_floor = floor;
     if (floor > 0) {

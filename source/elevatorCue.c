@@ -7,9 +7,6 @@ void queue_default_init(queueState * queue) {
         queue->order_down[i] = 0; 
         queue->order_inside[i] = 0;  
     }
-    /*for (int i = 0; i < NUMBER_OF_OUTSIDE_BUTTONS; ++i) { //skal vi ha 3 eller 4 på
-        
-    }*/
     queue->count_outside = 0;
     queue->count_inside = 0;
     queue->destination = -1;
