@@ -70,7 +70,7 @@ void open_door(ElevatorState* elev_state) {
 }
 
 
-void write_to_motor(queueState* queue, ElevatorState* elev_state) {
+void write_to_motor( ElevatorState* elev_state, queueState* queue) {
     if (elev_state->door == DOOR_OPEN) elev_state->movement = HARDWARE_MOVEMENT_STOP;
     else elev_state->movement = queue->preferred_motor_state; 
     //kunne lagt til en på stopbutton, men dette vil aldri skje
@@ -99,9 +99,9 @@ static int read_floor() { //skal ikke være en medlemsfunksjon til queue, burde 
     return -1;
 }
 
-void get_current_floor_state(queueState * queue) {
+void get_current_floor_state(ElevatorState * elev_state, queueState * queue) {
     int floor = read_floor();
-    
+    elev_state->current_floor = floor;
     if (floor > 0) {
         queue->current_floor = floor;
     }

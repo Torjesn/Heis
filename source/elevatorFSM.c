@@ -42,7 +42,6 @@ void elevator_fsm() {
         
         write_to_motor(queue, elev_state);
         set_lights(elev_state, queue);
-
         }
     }  
 }
