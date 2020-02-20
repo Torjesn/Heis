@@ -9,27 +9,30 @@
 //They should probably be set as static, and not included in headerfile
 
 #include "hardware.h"
-
+#define NUMBER_OF_FLOORS 4
+//#define NUMBER_OF_OUTSIDE_BUTTONS 3
+//#define DOWN_BUTTON_OFFSETT 1
+#define ARRAY_OFFSETT 1
 const int g_number_of_floors = 4; 
 
 /**
  * @brief  A struct to keep the different parts of the queue in order 
  * */ 
 typedef struct {
-    int order_up[4]; /** < Array for the orders going up from the outside */
-    int order_down[4]; /** < Array for the orders going down from the outside */
-    int order_inside[4]; /** < Orders from the inside */
+    int order_up[NUMBER_OF_FLOORS]; /** < Array for the orders going up from the outside */
+    int order_down[NUMBER_OF_FLOORS]; /** < Array for the orders going down from the outside */
+    int order_inside[NUMBER_OF_FLOORS]; /** < Orders from the inside */
     int count_outside; /** < Total number of orders outside */
     int count_inside; /** < Total numbers of orders inside */
     int destination; /** < The next destination */
     int current_floor; /** < The current floor, only changes on floors, not between */
-    HardwareMovement preferred_motor_state; /** < The state of the motor according to queue */
+    HardwareMovement preferred_motor_state; /** < What the queue wants the direction of the motor to be */
 } queueState; 
 
 /**
  * @brief Initilizes the queue
  * @param[out] queue Queue-arrays set to zero, counters set to zero, 
- * destination, current_floor and prefered_motor_state set to deafult
+ * destination and prefered_motor_state set to deafult
 */
 void queue_default_init(queueState * queue);
 
@@ -89,14 +92,6 @@ void queue_get_user_input(queueState * queue);
  */
 void queue_set_preferred_motor_state(queueState * queue);
 
-/**
- * @brief Deletes the queue if stop button is pressed
- * @param[out] p__preferred_motor_state If pressed, preferred_motor_state becomes idle
- * @param[out] queue_order_up If pressed, the up_queue is set to zero
- * @param[out] queue_order_down If pressed, the down_queue is set to zero
- * @param[out] queue_order_inside If pressed, the inside_queue is set to zero
- */
-void queue_delete_button(queueState *queue);
 
 /** 
  * @brief Sets the current_floor state of the queue. 

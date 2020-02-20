@@ -49,8 +49,6 @@ void init_elevator_states(ElevatorState* elev_state) {
     elev_state->movement = HARDWARE_MOVEMENT_STOP;
 }
 
-
-
 void try_close_door(ElevatorState* elev_state, clock_t* real_time, clock_t* door_open_timer) {
     if (hardware_read_obstruction_signal() || hardware_read_stop_signal()) {
         *door_open_timer = clock() + 3 * CLOCKS_PER_SEC;
@@ -73,38 +71,37 @@ void open_door(ElevatorState* elev_state) {
 void write_to_motor( ElevatorState* elev_state, queueState* queue) {
     if (elev_state->door == DOOR_OPEN) elev_state->movement = HARDWARE_MOVEMENT_STOP;
     else elev_state->movement = queue->preferred_motor_state; 
-    //kunne lagt til en på stopbutton, men dette vil aldri skje
     hardware_command_movement(elev_state->movement);
 }
 
 void stop_on_floor(ElevatorState* elev_state, clock_t* door_open_timer, queueState* queue) {
     *door_open_timer = clock() + 3 * CLOCKS_PER_SEC;
-    elev_state->movement = HARDWARE_MOVEMENT_STOP; //kan kanskje gjøres i en funksjon
+    elev_state->movement = HARDWARE_MOVEMENT_STOP;
     open_door(elev_state);
     queue_remove_orders_current_floor(queue);
+    queue_get_next_destination(queue); //gjøre dette bare i etasje?Ja, vi vil vel ikke risikere å skifte vei underveis?
+    queue_set_preferred_motor_state(queue); //Kunne lagd om til en funksjon?, we did
 }
 
 void stop_button_procedure(ElevatorState* elev_state, queueState* queue) {
     elev_state->movement = HARDWARE_MOVEMENT_STOP;
-    queue_delete_button(queue);
+    hardware_command_movement(elev_state->movement); //kan nok løses på en penere måte
+    queue_default_init(queue);
     if (elev_state->current_floor > 0) {
         elev_state->door = DOOR_OPEN;
     }
 }
 
-static int read_floor() { //skal ikke være en medlemsfunksjon til queue, burde kanskje flyttes på
+static int read_floor() {
     for (int i = 1; i <= g_number_of_floors; ++i ) {
         if(hardware_read_floor_sensor(i)) return i;
     }
     return -1;
 }
 
-<<<<<<< HEAD
-void get_current_floor_state(ElevatorState * elev_state, queueState * queue) {
-=======
+
 //burde ikke denne ligge i queue? denne er jo til og med i h-fila til queue
-void get_current_floor_state(queueState * queue) {
->>>>>>> c689fcc1d97634c61f7ba7f67403957957b1e31e
+void get_current_floor_state(ElevatorState *elev_state, queueState * queue) {
     int floor = read_floor();
     elev_state->current_floor = floor;
     if (floor > 0) {
