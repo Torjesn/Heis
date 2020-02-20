@@ -26,7 +26,7 @@ void set_lights(ElevatorState* elev_state, queueState * queue){ //vi må fjerne 
     //kølys inne
     for (int i = 0; i < order_inside_length; i++)
         {
-            hardware_command_order_light(i+1,HARDWARE_ORDER_INSIDE,   queue->order_inside[i]);
+            hardware_command_order_light(i+1,HARDWARE_ORDER_INSIDE, queue->order_inside[i]);
         }
     //order opp
     for (int i = 0; i < order_outside_length; i++)
@@ -99,7 +99,12 @@ static int read_floor() { //skal ikke være en medlemsfunksjon til queue, burde 
     return -1;
 }
 
+<<<<<<< HEAD
 void get_current_floor_state(ElevatorState * elev_state, queueState * queue) {
+=======
+//burde ikke denne ligge i queue? denne er jo til og med i h-fila til queue
+void get_current_floor_state(queueState * queue) {
+>>>>>>> c689fcc1d97634c61f7ba7f67403957957b1e31e
     int floor = read_floor();
     elev_state->current_floor = floor;
     if (floor > 0) {

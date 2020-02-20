@@ -115,7 +115,7 @@ void hardware_command_stop_light(int on);
  * @brief Sets the light in a button corresponding to an order
  * of type @p order_type, at floor @p floor.
  *
- * @param floor The floor of the order indicator.
+ * @param floor The floor of the order indicator.s
  * @param order_type The type of order.
  * @param on A truthy value (non-zero) to turn the light on;
  * 0 to turn it off.

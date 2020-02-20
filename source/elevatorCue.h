@@ -12,17 +12,19 @@
 
 const int g_number_of_floors = 4; 
 
+/**
+ * @brief  A struct to keep the different parts of the queue in order 
+ * */ 
 typedef struct {
-    int order_up[4]; //kan eventuelt ha tre her, gjør aksessering enklere med fire
-    int order_down[4];
-    int order_inside[4];
-    int count_outside;
-    int count_inside;
-    int destination;
-    int current_floor;
-    HardwareMovement preferred_motor_state;
+    int order_up[4]; /** < Array for the orders going up from the outside */
+    int order_down[4]; /** < Array for the orders going down from the outside */
+    int order_inside[4]; /** < Orders from the inside */
+    int count_outside; /** < Total number of orders outside */
+    int count_inside; /** < Total numbers of orders inside */
+    int destination; /** < The next destination */
+    int current_floor; /** < The current floor, only changes on floors, not between */
+    HardwareMovement preferred_motor_state; /** < The state of the motor according to queue */
 } queueState; 
- //set dox på denne
 
 /**
  * @brief Initilizes the queue
@@ -31,6 +33,8 @@ typedef struct {
 */
 void queue_default_init(queueState * queue);
 
+
+//Alternativt, @param [in, out] queue, vi bruker (meldemsvariabler)
 /**
  * @brief Removes the orders of the current floor, and decrement the queues
  * @param[in,out] queue_order_up The up order queue with the current floor removed
@@ -44,13 +48,12 @@ void queue_remove_orders_current_floor(queueState * queue);
 /**
  * @brief Choses the next destination of the elevator. The inside queue is prioritized over the the outside ones
  * @param[in,out] queue_order_up The up order queue decremented by one if next destination
- * @param[in,out] queue_order_dowm The down order queue decremented bye one if next destination
+ * @param[in,out] queue_order_dowm The down order queue decremented by one if next destination
  * @param[in,out] queue_order_inside The inside order queue decremented by one if next destination
  * @return next_floor Return the next floor, -1 if there are none requests pending
 */
 
 void queue_get_next_destination(queueState * queue);
-
 
 /**
  * @brief Checks if the elevator should stop on the floor or not
