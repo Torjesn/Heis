@@ -1,3 +1,7 @@
+/** @file 
+ * @brief A file with all the hardware-functions we use
+ * */
+
 #include "elevatorCue.h"
 #include "hardware.h"
 
@@ -15,10 +19,10 @@ typedef struct {
 //statene våre: doorState, hardwareMovement for motor
 
 //Burde vi ha alle de funksjoene vi kaller knyttet til hardware som output-parametere?
-
+//tja, nei, fordi vi sender jo ikke noe ut? 
 
 /**
- * @brief The elevator wil go down until it sees a valid floor
+ * @brief The elevator will go down until it sees a valid floor
 */
 
 void start_procedure_elevator();
@@ -45,7 +49,7 @@ void init_elevator_states(ElevatorState* elev_state);
 /**
  * @brief Tries to close the door, will be stopped if the door_open_timer is bigger than real_time.
  * The function checks if obstruction or stop is pressed, and sets the 3 second delay if true
- * @param[in] real_time Is compared to timer to checj if door can be closed
+ * @param[in] real_time Is compared to timer to check if door can be closed
  * @param[in, out] door_open_time Is set to 3 seconds ahead of real_time if stop or obstruction is pressed, then compared to real_time
  * @param[out] elev_state.door Closed if conditions are met
  */
@@ -59,10 +63,9 @@ void try_close_door(ElevatorState* elev_state, clock_t* real_time, clock_t* door
  * @param[out] elev_state.door Opened if conditions are met
  */
 
-void open_door(ElevatorState* elev_state)k
+void open_door(ElevatorState* elev_state);
 
 
-void write_to_motor(queueState* queue, ElevatorState* elev_state);
 /**
  * @brief Writes to the motor based on the state of the door and the wishes of the queue
  * @param[in] elev_state.door The motor will halt if door is open
@@ -77,7 +80,7 @@ void write_to_motor(queueState* queue, ElevatorState* elev_state);
  * @param[out] queue Deletes all orders on the current floor, 
  * and decrement all orders higher than the current floor
  */
-void stop_on_floor(ElevatorState* elev_state, clock_t* door_open_timer, queueState* queue)
+void stop_on_floor(ElevatorState* elev_state, clock_t* door_open_timer, queueState* queue);
 
 /**
  * @brief Procedure for stop button, motor stops, 

@@ -99,6 +99,7 @@ static int read_floor() { //skal ikke være en medlemsfunksjon til queue, burde 
     return -1;
 }
 
+//burde ikke denne ligge i queue? denne er jo til og med i h-fila til queue
 void get_current_floor_state(queueState * queue) {
     int floor = read_floor();
     

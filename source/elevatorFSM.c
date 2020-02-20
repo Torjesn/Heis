@@ -19,7 +19,7 @@ void elevator_fsm() {
     clock_t door_open_timer = clock();
     int start_bit = 1;
     while (1) {
-        //må ha noe som leser inn etagene
+        //må ha noe som leser inn etasjene
         
         real_time = clock();
         
@@ -31,8 +31,8 @@ void elevator_fsm() {
         
         if (queue_check_if_stop_floor(queue) || start_bit) {
             stop_on_floor(elev_state, queue, door_open_timer);
-            queue_get_next_destination(queue); //gjøre dette bare i etasje?
-            queue_set_preferred_motor_state(queue); //Kunne lagd om til en funksjon?
+            queue_get_next_destination(queue); //gjøre dette bare i etasje?Ja, vi vil vel ikke risikere å skifte vei underveis?
+            queue_set_preferred_motor_state(queue); //Kunne lagd om til en funksjon?, we did
             start_bit = 0;
         }
         if (elev_state->door == DOOR_OPEN) {
