@@ -48,7 +48,7 @@ void queue_get_next_destination(queueState * queue) {
                 return;
             }
         }
-    queue->destination = -1;
+    queue->destination = DEFAULT_DESTINATION;
 }
 
 int queue_check_if_stop_floor(queueState* queue) {
