@@ -99,12 +99,9 @@ static int read_floor() { //skal ikke være en medlemsfunksjon til queue, burde 
     return -1;
 }
 
-<<<<<<< HEAD
-void get_current_floor_state(ElevatorState * elev_state, queueState * queue) {
-=======
+
 //burde ikke denne ligge i queue? denne er jo til og med i h-fila til queue
-void get_current_floor_state(queueState * queue) {
->>>>>>> c689fcc1d97634c61f7ba7f67403957957b1e31e
+void get_current_floor_state(ElevatorState * elev_state, queueState * queue) {
     int floor = read_floor();
     elev_state->current_floor = floor;
     if (floor > 0) {
