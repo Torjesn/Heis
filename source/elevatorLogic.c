@@ -79,10 +79,11 @@ void write_to_motor( ElevatorState* elev_state, queueState* queue) {
 
 void stop_on_floor(ElevatorState* elev_state, clock_t* door_open_timer, queueState* queue) {
     *door_open_timer = clock() + 3 * CLOCKS_PER_SEC;
-    elev_state->movement = HARDWARE_MOVEMENT_STOP; //kan kanskje gjøres i en funksjon
+    elev_state->movement = HARDWARE_MOVEMENT_STOP;
     open_door(elev_state);
     queue_remove_orders_current_floor(queue);
 }
+
 
 void stop_button_procedure(ElevatorState* elev_state, queueState* queue) {
     elev_state->movement = HARDWARE_MOVEMENT_STOP;
@@ -92,7 +93,7 @@ void stop_button_procedure(ElevatorState* elev_state, queueState* queue) {
     }
 }
 
-static int read_floor() { //skal ikke være en medlemsfunksjon til queue, burde kanskje flyttes på
+static int read_floor() {
     for (int i = 1; i <= g_number_of_floors; ++i ) {
         if(hardware_read_floor_sensor(i)) return i;
     }
@@ -100,11 +101,3 @@ static int read_floor() { //skal ikke være en medlemsfunksjon til queue, burde 
 }
 
 
-//burde ikke denne ligge i queue? denne er jo til og med i h-fila til queue
-void get_current_floor_state(ElevatorState * elev_state, queueState * queue) {
-    int floor = read_floor();
-    elev_state->current_floor = floor;
-    if (floor > 0) {
-        queue->current_floor = floor;
-    }
-}

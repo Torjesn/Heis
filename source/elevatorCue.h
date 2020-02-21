@@ -103,7 +103,7 @@ void queue_delete_button(queueState *queue);
  * Does not change between floors.
  * @param[out] current_floor The current floor of the queue is set based on hardware.
 */
-void queue_get_current_floor(queueState *queue);
+void queue_get_current_floor(ElevatorState elev_state, queueState *queue);
 
 
 

@@ -1,5 +1,6 @@
 #include "hardware.h"
 #include "elevatorCue.h"
+#include "elevatorLogic.h"
 
 void queue_default_init(queueState * queue) {
     for (int i = 0; i < g_number_of_floors; ++i) {
@@ -112,6 +113,14 @@ void queue_delete_button(queueState *queue) {
     queue->count_outside = 0;
     queue->count_inside = 0;
     queue->preferred_motor_state = HARDWARE_MOVEMENT_STOP; //Kan være at denne dekkes andre plasser
+}
+
+void get_current_floor_state(ElevatorState * elev_state, queueState * queue) {
+    int floor = read_floor();
+    elev_state->current_floor = floor;
+    if (floor > 0) {
+        queue->current_floor = floor;
+    }
 }
 
 
