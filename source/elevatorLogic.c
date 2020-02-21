@@ -49,8 +49,6 @@ void init_elevator_states(ElevatorState* elev_state) {
     elev_state->movement = HARDWARE_MOVEMENT_STOP;
 }
 
-
-
 void try_close_door(ElevatorState* elev_state, clock_t* real_time, clock_t* door_open_timer) {
     if (hardware_read_obstruction_signal() || hardware_read_stop_signal()) {
         *door_open_timer = clock() + 3 * CLOCKS_PER_SEC;
@@ -73,7 +71,6 @@ void open_door(ElevatorState* elev_state) {
 void write_to_motor( ElevatorState* elev_state, queueState* queue) {
     if (elev_state->door == DOOR_OPEN) elev_state->movement = HARDWARE_MOVEMENT_STOP;
     else elev_state->movement = queue->preferred_motor_state; 
-    //kunne lagt til en på stopbutton, men dette vil aldri skje
     hardware_command_movement(elev_state->movement);
 }
 
@@ -82,19 +79,22 @@ void stop_on_floor(ElevatorState* elev_state, clock_t* door_open_timer, queueSta
     elev_state->movement = HARDWARE_MOVEMENT_STOP;
     open_door(elev_state);
     queue_remove_orders_current_floor(queue);
+    queue_get_next_destination(queue); //gjøre dette bare i etasje?Ja, vi vil vel ikke risikere å skifte vei underveis?
+    queue_set_preferred_motor_state(queue); //Kunne lagd om til en funksjon?, we did
 }
 
 
 void stop_button_procedure(ElevatorState* elev_state, queueState* queue) {
     elev_state->movement = HARDWARE_MOVEMENT_STOP;
-    queue_delete_button(queue);
+    hardware_command_movement(elev_state->movement); //kan nok løses på en penere måte
+    queue_default_init(queue);
     if (elev_state->current_floor > 0) {
         elev_state->door = DOOR_OPEN;
     }
 }
 
 static int read_floor() {
-    for (int i = 1; i <= g_number_of_floors; ++i ) {
+    for (int i = 1; i <= NUMBER_OF_FLOORS; ++i ) {
         if(hardware_read_floor_sensor(i)) return i;
     }
     return -1;

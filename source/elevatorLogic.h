@@ -71,7 +71,7 @@ void open_door(ElevatorState* elev_state);
  * @param[in] elev_state.door The motor will halt if door is open
  * @param[in] queue.prefered_motor_state If door is closed, the elevator will follow the queue
  */
-void write_to_motor(queueState* queue, ElevatorState* elev_state);
+void write_to_motor(ElevatorState* elev_state, queueState* queue);
 
 /**
  * @brief Stops motor, opens doors and executes orders at the floor.
