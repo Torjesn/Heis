@@ -10,10 +10,11 @@
 #pragma once
 #include "hardware.h"
 #define NUMBER_OF_FLOORS 4
-#define ARRAY_OFFSETT 1
 #define DEFAULT_DESTINATION -1
-#define NUMBER_OF_OUTSIDE_BUTTONS 3
-//#define DOWN_BUTTON_OFFSETT 1 
+#define DESTINATION_WAITING -2
+#define MAX_TIMES_INSIDE 5
+
+
 
 /**
  * @brief  A struct to keep the different parts of the queue in order 
@@ -28,6 +29,8 @@ typedef struct {
     int count_inside; /** < Total numbers of orders inside */
     int destination; /** < The next destination */
     int current_floor; /** < The current floor, only changes on floors, not between */
+    int current_floor_not_between;
+    int max_times_inside;
     HardwareMovement preferred_motor_state; /** < What the queue wants the direction of the motor to be */
 } queueState; 
 

@@ -6,6 +6,8 @@
 #include "hardware.h"
 #include <time.h>
 
+#define SECONDS_WAIT_DOOR 3
+
 typedef enum {
     DOOR_OPEN,
     DOOR_CLOSED
@@ -98,6 +100,10 @@ void stop_button_procedure(ElevatorState* elev_state, queueState* queue);
  * @param[out] current_floor The current floor of the queue is set based on hardware.
 */
 void get_current_floor_state(ElevatorState* elev_state, queueState *queue);
+
+int read_floor();
+
+
 
 
 

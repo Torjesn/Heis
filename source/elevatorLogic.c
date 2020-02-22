@@ -3,7 +3,7 @@
 #include "elevatorLogic.h"
 #include <time.h>
 
-static int read_floor() {
+int read_floor() {
     for (int i = 0; i < NUMBER_OF_FLOORS; ++i ) {
         if(hardware_read_floor_sensor(i)) return i;
     }
@@ -12,15 +12,15 @@ static int read_floor() {
 
 void start_procedure_elevator() {
     int floor_level =  read_floor();
+    
     while (floor_level == -1) {
         floor_level =  read_floor();
-        hardware_command_movement(HARDWARE_MOVEMENT_DOWN); //kan denne være før, så den slipper å settes hele tiden?
+        hardware_command_movement(HARDWARE_MOVEMENT_DOWN);
     }
 }
 
 void set_lights(ElevatorState* elev_state, queueState * queue){ 
-    //setter stopp-lys: 
-    hardware_command_stop_light(hardware_read_stop_signal()); //hardware_read_stop_signal returnerer 0 hvis den er av, 1, hvis på og command skriver med samme verdier
+    hardware_command_stop_light(hardware_read_stop_signal()); 
     if (elev_state->door == DOOR_OPEN) hardware_command_door_open(1);
     else hardware_command_door_open(0);
     
@@ -35,14 +35,13 @@ void set_lights(ElevatorState* elev_state, queueState * queue){
 }
 
 void init_elevator_states(ElevatorState* elev_state) {
-    elev_state->current_floor = -1;
     elev_state->door = DOOR_CLOSED;
     elev_state->movement = HARDWARE_MOVEMENT_STOP;
 }
 
 void try_close_door(ElevatorState* elev_state, clock_t* door_open_timer) {
     if (hardware_read_obstruction_signal() || hardware_read_stop_signal()) {
-        *door_open_timer = clock() + 3 * CLOCKS_PER_SEC;
+        *door_open_timer = clock() + SECONDS_WAIT_DOOR * CLOCKS_PER_SEC;
     }
     
     if (clock()>= *door_open_timer ) {
@@ -66,7 +65,7 @@ void write_to_motor( ElevatorState* elev_state, queueState* queue) {
 } 
 
 void stop_on_floor(ElevatorState* elev_state,  queueState* queue, clock_t* door_open_timer) {
-    *door_open_timer = clock() + 3 * CLOCKS_PER_SEC;
+    *door_open_timer = clock() + SECONDS_WAIT_DOOR * CLOCKS_PER_SEC;
     elev_state->movement = HARDWARE_MOVEMENT_STOP;
 }
 
@@ -83,6 +82,7 @@ void stop_button_procedure(ElevatorState* elev_state, queueState* queue) {
 void get_current_floor_state(ElevatorState * elev_state, queueState * queue) {
     int floor = read_floor();
     elev_state->current_floor = floor;
+    queue->current_floor_not_between = floor;
     if (floor >= 0) {
         queue->current_floor = floor;
     }
