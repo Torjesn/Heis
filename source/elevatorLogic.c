@@ -83,6 +83,7 @@ void stop_on_floor(ElevatorState* elev_state, clock_t* door_open_timer, queueSta
     queue_set_preferred_motor_state(queue); //Kunne lagd om til en funksjon?, we did
 }
 
+
 void stop_button_procedure(ElevatorState* elev_state, queueState* queue) {
     elev_state->movement = HARDWARE_MOVEMENT_STOP;
     hardware_command_movement(elev_state->movement); //kan nok løses på en penere måte
@@ -100,11 +101,3 @@ static int read_floor() {
 }
 
 
-//burde ikke denne ligge i queue? denne er jo til og med i h-fila til queue
-void get_current_floor_state(ElevatorState *elev_state, queueState * queue) {
-    int floor = read_floor();
-    elev_state->current_floor = floor;
-    if (floor > 0) {
-        queue->current_floor = floor;
-    }
-}

@@ -1,5 +1,6 @@
 #include "hardware.h"
 #include "elevatorCue.h"
+#include "elevatorLogic.h"
 
 void queue_default_init(queueState * queue) {
     for (int i = 0; i < NUMBER_OF_FLOORS; ++i) {
@@ -94,6 +95,14 @@ void queue_set_preferred_motor_state(queueState *queue) {
     else if (queue->current_floor > queue->destination) queue->preferred_motor_state = HARDWARE_MOVEMENT_DOWN;
     else if (queue->current_floor < queue->destination) queue->preferred_motor_state = HARDWARE_MOVEMENT_UP;
     else queue->preferred_motor_state = HARDWARE_MOVEMENT_STOP;
+}
+
+void get_current_floor_state(ElevatorState * elev_state, queueState * queue) {
+    int floor = read_floor();
+    elev_state->current_floor = floor;
+    if (floor > 0) {
+        queue->current_floor = floor;
+    }
 }
 
 
