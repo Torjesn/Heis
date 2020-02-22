@@ -20,9 +20,7 @@ static void decrement_array_over_limit(int array[], int limit, int length) {
         if(array[i] > limit) --array[i];
     }
 }
- //decrement_array_over_limit(queue->order_up, queue->order_up[queue->current_floor],NUMBER_OF_FLOORS);
-    //decrement_array_over_limit(queue->order_down, queue->order_down[queue->current_floor], NUMBER_OF_FLOORS);
-    //decrement_array_over_limit(queue->order_inside, queue->order_inside[queue->current_floor], NUMBER_OF_FLOORS);
+
 void queue_remove_orders_current_floor(queueState * queue) {
     if (queue->order_up[queue->current_floor]) {
     decrement_array_over_limit(queue->order_up, queue->order_up[queue->current_floor],NUMBER_OF_FLOORS);

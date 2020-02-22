@@ -19,21 +19,20 @@ void elevator_fsm() {
 
     get_current_floor_state(elev_state, queue);
 
-    clock_t * real_time = (clock_t *) malloc(sizeof(*real_time));
-    * real_time = clock();
+    //clock_t * real_time = (clock_t *) malloc(sizeof(*real_time));
+    //* real_time = clock();
     clock_t * door_open_timer = (clock_t *) malloc(sizeof(*door_open_timer));
-    * door_open_timer = clock(); // oppsett fungerer 
+    * door_open_timer = clock(); 
     while (1) {
-        *real_time = clock();
-        get_current_floor_state(elev_state, queue); //fungerer 
-        if (hardware_read_stop_signal() ) { //fungerer 
-            stop_button_procedure(elev_state, queue); //fungerer 
+        
+        get_current_floor_state(elev_state, queue); 
+        if (hardware_read_stop_signal() ) { 
+            stop_button_procedure(elev_state, queue);
         } else {
-            queue_get_user_input(queue); // fungerer 
-            if (queue->destination == DEFAULT_DESTINATION) {
-                queue_get_next_destination(queue);
-                queue_set_preferred_motor_state(queue);
-            }
+            queue_get_user_input(queue);  
+            queue_get_next_destination(queue);
+            queue_set_preferred_motor_state(queue);
+            
                  
 
             if (queue_check_if_stop_floor(queue)) {
@@ -46,9 +45,9 @@ void elevator_fsm() {
             write_to_motor(elev_state, queue);
         }
         
-        set_lights(elev_state, queue); //fungerer
-        if (elev_state->door == DOOR_OPEN) { //fungerer
-                try_close_door(elev_state, real_time, door_open_timer); 
+        set_lights(elev_state, queue);
+        if (elev_state->door == DOOR_OPEN) { 
+                try_close_door(elev_state, door_open_timer); 
         }
     }  
 }

@@ -40,15 +40,15 @@ void init_elevator_states(ElevatorState* elev_state) {
     elev_state->movement = HARDWARE_MOVEMENT_STOP;
 }
 
-void try_close_door(ElevatorState* elev_state, clock_t* real_time, clock_t* door_open_timer) {
+void try_close_door(ElevatorState* elev_state, clock_t* door_open_timer) {
     if (hardware_read_obstruction_signal() || hardware_read_stop_signal()) {
         *door_open_timer = clock() + 3 * CLOCKS_PER_SEC;
     }
-    if (*real_time >= *door_open_timer ) {
+    
+    if (clock()>= *door_open_timer ) {
         elev_state->door = DOOR_CLOSED;
         *door_open_timer = clock();
     }
-    *real_time = clock();
 }
 
 void open_door(ElevatorState* elev_state) {

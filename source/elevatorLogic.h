@@ -55,7 +55,7 @@ void init_elevator_states(ElevatorState* elev_state);
  * @param[out] elev_state.door Closed if conditions are met
  */
 
-void try_close_door(ElevatorState* elev_state, clock_t* real_time, clock_t* door_open_timer);
+void try_close_door(ElevatorState* elev_state, clock_t* door_open_timer);
 
 /**
  * @brief Opens the door if the elevator is at rest at a floor.
