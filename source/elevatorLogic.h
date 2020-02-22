@@ -34,7 +34,7 @@ void start_procedure_elevator();
  * @param [in] elev_state Door lights are set based on the door state
  */
 
-void set_lights(ElevatorState * elevator, queueState * queue);
+void set_lights(ElevatorState * elev_state, queueState * queue);
 
 
 /**
