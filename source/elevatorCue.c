@@ -1,6 +1,7 @@
 #include "hardware.h"
 #include "elevatorCue.h"
 #include "elevatorLogic.h"
+#include "elevatorFSM.h"
 
 void queue_default_init(queueState * queue) {
     for (int i = 0; i < NUMBER_OF_FLOORS; ++i) {
@@ -50,9 +51,10 @@ void queue_get_next_destination(queueState * queue) {
             }
         }
     queue->destination = DEFAULT_DESTINATION;
+    }
 }
 
-int queue_check_if_stop_floor(queueState* queue) {
+int queue_check_if_stop_floor(queueState* queue){
     int floor_array = queue->current_floor-ARRAY_OFFSETT; //burde hete noe annet enn floor_array
     if (floor_array >= 0 && floor_array < NUMBER_OF_FLOORS) {   //kanskje ikke nødvendig 
         if(
