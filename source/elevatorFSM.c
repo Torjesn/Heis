@@ -34,10 +34,7 @@ void elevator_fsm() {
                 queue_get_next_destination(queue);
                 queue_set_preferred_motor_state(queue);
             }
-            
-            //if (queue->preferred_motor_state != HARDWARE_MOVEMENT_STOP) hardware_command_stop_light(1); //tset
-            //else hardware_command_stop_light(0);
-            
+                 
 
             if (queue_check_if_stop_floor(queue)) {
                 stop_on_floor(elev_state, queue, door_open_timer); 

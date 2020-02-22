@@ -44,7 +44,7 @@ void queue_remove_orders_current_floor(queueState * queue) {
 }
 
 void queue_get_next_destination(queueState * queue) {
-    if (queue->destination == queue->current_floor) {
+    if (queue->destination == queue->current_floor || queue->destination == DEFAULT_DESTINATION) {
         for(int i = 0; i< NUMBER_OF_FLOORS; ++i) {
             if (queue->order_inside[i] == 1) {
                 queue->destination = i;
@@ -68,7 +68,8 @@ void queue_get_next_destination(queueState * queue) {
 int queue_check_if_stop_floor(queueState* queue) {
     if (queue->current_floor >= 0 && queue->current_floor < NUMBER_OF_FLOORS) {   //kanskje ikke nødvendig, helt oveerflødig, ettersom current floor ikke er -1
         if(
-            queue->order_inside[queue->current_floor] 
+            queue->order_inside[queue->current_floor]
+            || queue->destination == queue->current_floor
             || (queue->order_up[queue->current_floor] && queue->preferred_motor_state ==  HARDWARE_MOVEMENT_UP) 
             || (queue->order_down[queue->current_floor] && queue->preferred_motor_state ==  HARDWARE_MOVEMENT_DOWN)
         ) 
