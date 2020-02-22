@@ -30,11 +30,10 @@ void elevator_fsm() {
             
             queue_get_elevator_input(queue);
             if (queue_check_if_stop_floor(queue) || queue->destination == DEFAULT_DESTINATION) {
-                stop_on_floor(elev_state, queue, door_open_timer);
+                stop_on_floor(elev_state, queue, door_open_timer); //kan være at vi burde ha noen flere funkjsoner utenfor for å
             }
             write_to_motor(queue, elev_state);
         }
-        
         
         set_lights(elev_state, queue);
         if (elev_state->door == DOOR_OPEN) {
