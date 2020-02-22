@@ -1,6 +1,7 @@
 #include "hardware.h"
 #include "elevatorCue.h"
 #include "elevatorLogic.h"
+#include "elevatorFSM.h"
 
 void queue_default_init(queueState * queue) {
     for (int i = 0; i < NUMBER_OF_FLOORS; ++i) {
