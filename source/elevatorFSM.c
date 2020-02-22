@@ -33,7 +33,6 @@ void elevator_fsm() {
             if (queue->destination == DEFAULT_DESTINATION) {
                 queue_get_next_destination(queue);
                 queue_set_preferred_motor_state(queue);
-                hardware_command_stop_light(1);
             }
             
             //if (queue->preferred_motor_state != HARDWARE_MOVEMENT_STOP) hardware_command_stop_light(1); //tset

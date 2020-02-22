@@ -20,7 +20,7 @@ void start_procedure_elevator() {
 
 void set_lights(ElevatorState* elev_state, queueState * queue){ 
     //setter stopp-lys: 
-    //hardware_command_stop_light(hardware_read_stop_signal()); //hardware_read_stop_signal returnerer 0 hvis den er av, 1, hvis på og command skriver med samme verdier
+    hardware_command_stop_light(hardware_read_stop_signal()); //hardware_read_stop_signal returnerer 0 hvis den er av, 1, hvis på og command skriver med samme verdier
     if (elev_state->door == DOOR_OPEN) hardware_command_door_open(1);
     else hardware_command_door_open(0);
     
@@ -61,7 +61,7 @@ void open_door(ElevatorState* elev_state) {
 
 void write_to_motor( ElevatorState* elev_state, queueState* queue) {
     if (elev_state->door == DOOR_OPEN) elev_state->movement = HARDWARE_MOVEMENT_STOP;
-    elev_state->movement = queue->preferred_motor_state; 
+    else elev_state->movement = queue->preferred_motor_state; 
     hardware_command_movement(elev_state->movement);
 } 
 
