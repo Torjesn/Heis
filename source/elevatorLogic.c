@@ -4,7 +4,7 @@
 #include <time.h>
 
 static int read_floor() {
-    for (int i = 1; i <= NUMBER_OF_FLOORS; ++i ) {
+    for (int i = 0; i < NUMBER_OF_FLOORS; ++i ) {
         if(hardware_read_floor_sensor(i)) return i;
     }
     return -1;
@@ -26,12 +26,9 @@ void set_lights(ElevatorState* elev_state, queueState * queue){
     
     for (int i = 0; i < NUMBER_OF_FLOORS; i++)
         {
-            hardware_command_order_light(i+1,HARDWARE_ORDER_INSIDE, queue->order_inside[i]);
-        }
-    for (int i = 0; i < NUMBER_OF_OUTSIDE_BUTTONS; i++)
-        {
-            hardware_command_order_light(i+1,HARDWARE_ORDER_UP, queue->order_up[i]);
-            hardware_command_order_light(i+2, HARDWARE_ORDER_DOWN, queue->order_down[i+1]);
+            hardware_command_order_light(i,HARDWARE_ORDER_INSIDE, queue->order_inside[i]);
+            hardware_command_order_light(i,HARDWARE_ORDER_UP, queue->order_up[i]);
+            hardware_command_order_light(i, HARDWARE_ORDER_DOWN, queue->order_down[i]);
         }
     hardware_command_floor_indicator_on(queue->current_floor);
 
@@ -57,7 +54,7 @@ void try_close_door(ElevatorState* elev_state, clock_t* real_time, clock_t* door
 void open_door(ElevatorState* elev_state) {
     if (
         elev_state->movement == HARDWARE_MOVEMENT_STOP
-        && elev_state->current_floor > 0
+        && elev_state->current_floor >= 0
     ) elev_state->door = DOOR_OPEN;
 }
 
@@ -82,7 +79,7 @@ void stop_button_procedure(ElevatorState* elev_state, queueState* queue) {
     elev_state->movement = HARDWARE_MOVEMENT_STOP;
     hardware_command_movement(elev_state->movement); //kan nok løses på en penere måte
     queue_default_init(queue);
-    if (elev_state->current_floor > 0) {
+    if (elev_state->current_floor >= 0) {
         elev_state->door = DOOR_OPEN;
     }
 }
@@ -90,7 +87,7 @@ void stop_button_procedure(ElevatorState* elev_state, queueState* queue) {
 void get_current_floor_state(ElevatorState * elev_state, queueState * queue) {
     int floor = read_floor();
     elev_state->current_floor = floor;
-    if (floor > 0) {
+    if (floor >= 0) {
         queue->current_floor = floor;
     }
 }

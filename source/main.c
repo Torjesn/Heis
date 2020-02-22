@@ -29,6 +29,7 @@ static void sigint_handler(int sig){
 }
 
 int main(){
+   
     int error = hardware_init();
     if(error != 0){
         fprintf(stderr, "Unable to initialize hardware\n");
@@ -36,7 +37,9 @@ int main(){
     }
 
     signal(SIGINT, sigint_handler);
+    
     elevator_fsm();
+
 
     return 0;
 }
