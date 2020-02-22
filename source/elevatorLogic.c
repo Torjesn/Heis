@@ -3,42 +3,33 @@
 #include "elevatorLogic.h"
 #include <time.h>
 
+static int read_floor() {
+    for (int i = 0; i < NUMBER_OF_FLOORS; ++i ) {
+        if(hardware_read_floor_sensor(i)) return i;
+    }
+    return -1;
+}
+
 void start_procedure_elevator() {
     int floor_level =  read_floor();
     while (floor_level == -1) {
-        int floor_level =  read_floor();
+        floor_level =  read_floor();
         hardware_command_movement(HARDWARE_MOVEMENT_DOWN); //kan denne være før, så den slipper å settes hele tiden?
     }
 }
 
-void set_lights(ElevatorState* elev_state, queueState * queue){ //vi må fjerne kommentarer når bi er ferdige -Torje, endret til elev_state, kan enklelt endre navn på alle
+void set_lights(ElevatorState* elev_state, queueState * queue){ 
     //setter stopp-lys: 
     hardware_command_stop_light(hardware_read_stop_signal()); //hardware_read_stop_signal returnerer 0 hvis den er av, 1, hvis på og command skriver med samme verdier
-    //setter døra til åpen: 
-    if (elev_state->door = DOOR_OPEN) {
-        hardware_command_door_open(1);
-    } else if (elev_state->door = DOOR_CLOSED) { //denne kan endres til else
-        hardware_command_door_open(0);
-    }
-    //setter order lights 
-    int order_outside_length = 3;
-    int order_inside_length = 4;
-    //kølys inne
-    for (int i = 0; i < order_inside_length; i++)
+    if (elev_state->door == DOOR_OPEN) hardware_command_door_open(1);
+    else hardware_command_door_open(0);
+    
+    for (int i = 0; i < NUMBER_OF_FLOORS; i++)
         {
-            hardware_command_order_light(i+1,HARDWARE_ORDER_INSIDE, queue->order_inside[i]);
+            hardware_command_order_light(i,HARDWARE_ORDER_INSIDE, queue->order_inside[i]);
+            hardware_command_order_light(i,HARDWARE_ORDER_UP, queue->order_up[i]);
+            hardware_command_order_light(i, HARDWARE_ORDER_DOWN, queue->order_down[i]);
         }
-    //order opp
-    for (int i = 0; i < order_outside_length; i++)
-        {
-            hardware_command_order_light(i+1,HARDWARE_ORDER_UP, queue->order_up[i]);
-        }
-    //order ned 
-    for (int i = 0; i < order_outside_length; i++)
-        {
-            hardware_command_order_light(i+2, HARDWARE_ORDER_DOWN, queue->order_down[i+1]);
-        }
-    //etasjelys: //siden det er mutually exlusive så er det nok å skru på en av dem. 
     hardware_command_floor_indicator_on(queue->current_floor);
 
 }
@@ -63,7 +54,7 @@ void try_close_door(ElevatorState* elev_state, clock_t* real_time, clock_t* door
 void open_door(ElevatorState* elev_state) {
     if (
         elev_state->movement == HARDWARE_MOVEMENT_STOP
-        && elev_state->current_floor > 0
+        && elev_state->current_floor >= 0
     ) elev_state->door = DOOR_OPEN;
 }
 
@@ -74,7 +65,7 @@ void write_to_motor( ElevatorState* elev_state, queueState* queue) {
     hardware_command_movement(elev_state->movement);
 }
 
-void stop_on_floor(ElevatorState* elev_state, clock_t* door_open_timer, queueState* queue) {
+void stop_on_floor(ElevatorState* elev_state,  queueState* queue, clock_t* door_open_timer) {
     *door_open_timer = clock() + 3 * CLOCKS_PER_SEC;
     elev_state->movement = HARDWARE_MOVEMENT_STOP;
     open_door(elev_state);
@@ -88,16 +79,16 @@ void stop_button_procedure(ElevatorState* elev_state, queueState* queue) {
     elev_state->movement = HARDWARE_MOVEMENT_STOP;
     hardware_command_movement(elev_state->movement); //kan nok løses på en penere måte
     queue_default_init(queue);
-    if (elev_state->current_floor > 0) {
+    if (elev_state->current_floor >= 0) {
         elev_state->door = DOOR_OPEN;
     }
 }
 
-static int read_floor() {
-    for (int i = 1; i <= NUMBER_OF_FLOORS; ++i ) {
-        if(hardware_read_floor_sensor(i)) return i;
+void get_current_floor_state(ElevatorState * elev_state, queueState * queue) {
+    int floor = read_floor();
+    elev_state->current_floor = floor;
+    if (floor >= 0) {
+        queue->current_floor = floor;
     }
-    return -1;
 }
-
 

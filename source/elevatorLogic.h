@@ -1,9 +1,10 @@
 /** @file 
  * @brief A file with all the hardware-functions we use
  * */
-
+#pragma once
 #include "elevatorCue.h"
 #include "hardware.h"
+#include <time.h>
 
 typedef enum {
     DOOR_OPEN,
@@ -80,7 +81,7 @@ void write_to_motor(ElevatorState* elev_state, queueState* queue);
  * @param[out] queue Deletes all orders on the current floor, 
  * and decrement all orders higher than the current floor
  */
-void stop_on_floor(ElevatorState* elev_state, clock_t* door_open_timer, queueState* queue);
+void stop_on_floor(ElevatorState* elev_state,  queueState* queue, clock_t* door_open_timer);
 
 /**
  * @brief Procedure for stop button, motor stops, 
@@ -90,5 +91,13 @@ void stop_on_floor(ElevatorState* elev_state, clock_t* door_open_timer, queueSta
  * @param[out] elev_state.door Opens door if on floor
  */
 void stop_button_procedure(ElevatorState* elev_state, queueState* queue);
+
+/** 
+ * @brief Sets the current_floor state of the queue. 
+ * Does not change between floors.
+ * @param[out] current_floor The current floor of the queue is set based on hardware.
+*/
+void get_current_floor_state(ElevatorState* elev_state, queueState *queue);
+
 
 

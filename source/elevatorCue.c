@@ -22,45 +22,43 @@ static void decrement_array_over_limit(int array[], int limit, int length) {
 }
 
 void queue_remove_orders_current_floor(queueState * queue) {
-    int floor_array = queue->current_floor-ARRAY_OFFSETT;
-    decrement_array_over_limit(queue->order_up, queue->order_up[floor_array],NUMBER_OF_FLOORS);
-    decrement_array_over_limit(queue->order_down, queue->order_down[floor_array], NUMBER_OF_FLOORS);
-    decrement_array_over_limit(queue->order_inside, queue->order_inside[floor_array], NUMBER_OF_FLOORS);
+    decrement_array_over_limit(queue->order_up, queue->order_up[queue->current_floor],NUMBER_OF_FLOORS);
+    decrement_array_over_limit(queue->order_down, queue->order_down[queue->current_floor], NUMBER_OF_FLOORS);
+    decrement_array_over_limit(queue->order_inside, queue->order_inside[queue->current_floor], NUMBER_OF_FLOORS);
     
-    queue->order_up[floor_array] = 0;
-    queue->order_down[floor_array] = 0;
-    queue->order_inside[floor_array] = 0;
+    queue->order_up[queue->current_floor] = 0;
+    queue->order_down[queue->current_floor] = 0;
+    queue->order_inside[queue->current_floor] = 0;
 }
 
 void queue_get_next_destination(queueState * queue) {
     if (queue->destination == queue->current_floor) {
         for(int i = 0; i< NUMBER_OF_FLOORS; ++i) {
-            if (queue->order_inside[i] == 1) {
-                queue->destination = i+ARRAY_OFFSETT;
+            if (queue->order_inside[i] == 1) { //problem, får vi dekrementert køen før?
+                queue->destination = i;
                 return;
             }
         }
         for(int i = 0; i< NUMBER_OF_FLOORS; ++i) {
             if (queue->order_up[i] == 1) {
-                queue->destination = i+ARRAY_OFFSETT;
+                queue->destination = i;
                 return;
             }
             if (queue->order_down[i] == 1) {
-                queue->destination = i+ARRAY_OFFSETT;
+                queue->destination = i;
                 return;
             }
         }
-    queue->destination = DEFAULT_DESTINATION;
+        queue->destination = DEFAULT_DESTINATION;
     }
 }
 
-int queue_check_if_stop_floor(queueState* queue){
-    int floor_array = queue->current_floor-ARRAY_OFFSETT; //burde hete noe annet enn floor_array
-    if (floor_array >= 0 && floor_array < NUMBER_OF_FLOORS) {   //kanskje ikke nødvendig 
+int queue_check_if_stop_floor(queueState* queue) {
+    if (queue->current_floor >= 0 && queue->current_floor < NUMBER_OF_FLOORS) {   //kanskje ikke nødvendig, helt oveerflødig, ettersom current floor ikke er -1
         if(
-            queue->order_inside[floor_array] 
-            || (queue->order_up[floor_array] && queue->preferred_motor_state ==  HARDWARE_MOVEMENT_UP) 
-            || (queue->order_down[floor_array] && queue->preferred_motor_state ==  HARDWARE_MOVEMENT_DOWN)
+            queue->order_inside[queue->current_floor] 
+            || (queue->order_up[queue->current_floor] && queue->preferred_motor_state ==  HARDWARE_MOVEMENT_UP) 
+            || (queue->order_down[queue->current_floor] && queue->preferred_motor_state ==  HARDWARE_MOVEMENT_DOWN)
         ) 
         {       
             return 1;
@@ -72,19 +70,19 @@ int queue_check_if_stop_floor(queueState* queue){
 
 void queue_get_user_input(queueState * queue) {  
     for (int i = 0; i < NUMBER_OF_FLOORS; ++i) {
-        if(hardware_read_order(i+ARRAY_OFFSETT, HARDWARE_ORDER_UP)) {
+        if(hardware_read_order(i, HARDWARE_ORDER_UP)) {
             if(queue->order_up[i] == 0) {
                 queue->order_up[i] = ++queue->count_outside;
             }
         }
 
-        if(hardware_read_order(i+ARRAY_OFFSETT, HARDWARE_ORDER_DOWN)) { 
+        if(hardware_read_order(i, HARDWARE_ORDER_DOWN)) { 
             if(queue->order_down[i] == 0) {
                 queue->order_down[i] = ++queue->count_outside;
             }
         }
         
-        if(hardware_read_order(i+ARRAY_OFFSETT, HARDWARE_ORDER_INSIDE)) {
+        if(hardware_read_order(i, HARDWARE_ORDER_INSIDE)) {
             if(queue->order_inside[i] == 0) {
                 queue->order_inside[i] = ++queue->count_inside;
             }
@@ -99,13 +97,7 @@ void queue_set_preferred_motor_state(queueState *queue) {
     else queue->preferred_motor_state = HARDWARE_MOVEMENT_STOP;
 }
 
-void get_current_floor_state(ElevatorState * elev_state, queueState * queue) {
-    int floor = read_floor();
-    elev_state->current_floor = floor;
-    if (floor > 0) {
-        queue->current_floor = floor;
-    }
-}
+
 
 
 
