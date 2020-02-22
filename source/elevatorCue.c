@@ -14,16 +14,20 @@ void queue_default_init(queueState * queue) {
     queue->preferred_motor_state = HARDWARE_MOVEMENT_STOP;
 }
 
-static void decrement_array_over_limit(int array[], int limit, int length) {
+/*static void decrement_array_over_limit(int array[], int limit, int length) {
     for (int i = 0; i < length; ++i) {
         if(array[i] > limit) --array[i];
     }
-}
-
+}*/
+ //decrement_array_over_limit(queue->order_up, queue->order_up[queue->current_floor],NUMBER_OF_FLOORS);
+    //decrement_array_over_limit(queue->order_down, queue->order_down[queue->current_floor], NUMBER_OF_FLOORS);
+    //decrement_array_over_limit(queue->order_inside, queue->order_inside[queue->current_floor], NUMBER_OF_FLOORS);
 void queue_remove_orders_current_floor(queueState * queue) {
-    decrement_array_over_limit(queue->order_up, queue->order_up[queue->current_floor],NUMBER_OF_FLOORS);
-    decrement_array_over_limit(queue->order_down, queue->order_down[queue->current_floor], NUMBER_OF_FLOORS);
-    decrement_array_over_limit(queue->order_inside, queue->order_inside[queue->current_floor], NUMBER_OF_FLOORS);
+     for (int i = 0; i < NUMBER_OF_FLOORS; ++i) {
+        if( queue->order_up[i] > queue->order_up[queue->current_floor]) --queue->order_up[i];
+        if( queue->order_down[i] > queue->order_down[queue->current_floor]) --queue->order_down[i];
+        if( queue->order_inside[i] > queue->order_inside[queue->current_floor]) --queue->order_inside[i];
+    }
     
     queue->order_up[queue->current_floor] = 0;
     queue->order_down[queue->current_floor] = 0;
@@ -33,7 +37,7 @@ void queue_remove_orders_current_floor(queueState * queue) {
 void queue_get_next_destination(queueState * queue) {
     if (queue->destination == queue->current_floor) {
         for(int i = 0; i< NUMBER_OF_FLOORS; ++i) {
-            if (queue->order_inside[i] == 1) { //problem, får vi dekrementert køen før?
+            if (queue->order_inside[i] == 1) {
                 queue->destination = i;
                 return;
             }

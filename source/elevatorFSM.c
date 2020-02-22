@@ -24,17 +24,28 @@ void elevator_fsm() {
     clock_t * door_open_timer = (clock_t *) malloc(sizeof(*door_open_timer));
     * door_open_timer = clock(); // oppsett fungerer 
     while (1) {
-        
         *real_time = clock();
         get_current_floor_state(elev_state, queue); //fungerer 
-        
         if (hardware_read_stop_signal() ) { //fungerer 
             stop_button_procedure(elev_state, queue); //fungerer 
         } else {
-            
             queue_get_user_input(queue); // fungerer 
-            if (queue_check_if_stop_floor(queue) /*queue->destination == DEFAULT_DESTINATION*/) {
-                stop_on_floor(elev_state, queue, door_open_timer); //kan være at vi burde ha noen flere funkjsoner utenfor for å
+            if (queue->destination == DEFAULT_DESTINATION) {
+                queue_get_next_destination(queue);
+                queue_set_preferred_motor_state(queue);
+                hardware_command_stop_light(1);
+            }
+            
+            //if (queue->preferred_motor_state != HARDWARE_MOVEMENT_STOP) hardware_command_stop_light(1); //tset
+            //else hardware_command_stop_light(0);
+            
+
+            if (queue_check_if_stop_floor(queue)) {
+                stop_on_floor(elev_state, queue, door_open_timer); 
+                open_door(elev_state);
+                queue_remove_orders_current_floor(queue);
+                queue_get_next_destination(queue);
+                queue_set_preferred_motor_state(queue);
             }
             write_to_motor(elev_state, queue);
         }
