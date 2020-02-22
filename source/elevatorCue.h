@@ -7,7 +7,7 @@
 //DISCLAIMER
 //Some of the smaller functions should possibly not be here, we should ask on tuesday
 //They should probably be set as static, and not included in headerfile
-
+#pragma once
 #include "hardware.h"
 #define NUMBER_OF_FLOORS 4
 #define ARRAY_OFFSETT 1
@@ -94,12 +94,6 @@ void queue_get_user_input(queueState * queue);
  */
 void queue_set_preferred_motor_state(queueState * queue);
 
-/** 
- * @brief Sets the current_floor state of the queue. 
- * Does not change between floors.
- * @param[out] current_floor The current floor of the queue is set based on hardware.
-*/
-void queue_get_current_floor(ElevatorState elev_state, queueState *queue);
 
 
 

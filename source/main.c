@@ -6,7 +6,7 @@
 #include "elevatorCue.h"
 #include "elevatorFSM.h"
 
-static void clear_all_order_lights(){
+/*static void clear_all_order_lights(){
     HardwareOrder order_types[3] = {
         HARDWARE_ORDER_UP,
         HARDWARE_ORDER_INSIDE,
@@ -20,7 +20,7 @@ static void clear_all_order_lights(){
         }
     }
 }
-
+*/
 static void sigint_handler(int sig){
     (void)(sig);
     printf("Terminating elevator\n");
@@ -37,7 +37,6 @@ int main(){
 
     signal(SIGINT, sigint_handler);
     elevator_fsm();
-   
 
     return 0;
 }
