@@ -3,16 +3,11 @@
 * @brief The queue system of the elevator
 
 */
+#ifndef QUEUE_SYSEM.H
+#define QUEUE_SYSTEM.H
 
-//DISCLAIMER
-//Some of the smaller functions should possibly not be here, we should ask on tuesday
-//They should probably be set as static, and not included in headerfile
-#pragma once
 #include "hardware.h"
 #define NUMBER_OF_FLOORS 4
-#define DEFAULT_DESTINATION -1
-#define DESTINATION_WAITING -2
-#define MAX_TIMES_INSIDE 5
 
 
 
@@ -25,21 +20,26 @@ typedef struct {
     int order_up[NUMBER_OF_FLOORS]; /** < Array for the orders going up from the outside */
     int order_down[NUMBER_OF_FLOORS]; /** < Array for the orders going down from the outside */
     int order_inside[NUMBER_OF_FLOORS]; /** < Orders from the inside */
-    int count_outside; /** < Total number of orders outside */
-    int count_inside; /** < Total numbers of orders inside */
-    int destination; /** < The next destination */
-    int current_floor; /** < The current floor, only changes on floors, not between */
-    int current_floor_not_between;
-    int max_times_inside;
+    int orders_total[NUMBER_OF_FLOORS];
+    int saved_floor; /** < The current floor, only changes on floors, not between */
+    int current_floor;
     HardwareMovement preferred_motor_state; /** < What the queue wants the direction of the motor to be */
-} QueueState; 
+} QueueState2; 
+
+/** 
+ * @brief Sets the current_floor state of the queue. 
+ * Does not change between floors.
+ * @param[out] current_floor The current floor of the queue is set based on hardware.
+*/
+
+void queue_get_current_floor(QueueState2 * p_queue);
 
 /**
  * @brief Initilizes the queue
  * @param[out] queue Queue-arrays set to zero, counters set to zero, 
  * destination and prefered_motor_state set to deafult
 */
-void queue_default_init(QueueState * p_queue);
+void queue_default_init(QueueState2 * p_queue);
 
 
 //Alternativt, @param [in, out] queue, vi bruker (meldemsvariabler)
@@ -50,18 +50,10 @@ void queue_default_init(QueueState * p_queue);
  * @param[in,out] queue_order_inside The inside order queue with the current floor removed
 
 */
-void queue_remove_orders_current_floor(QueueState * p_queue);
+void queue_remove_orders_current_floor(QueueState2 * p_queue);
 
 
-/**
- * @brief Choses the next destination of the elevator. The inside queue is prioritized over the the outside ones
- * @param[in,out] queue_order_up The up order queue decremented by one if next destination
- * @param[in,out] queue_order_dowm The down order queue decremented by one if next destination
- * @param[in,out] queue_order_inside The inside order queue decremented by one if next destination
- * @return next_floor Return the next floor, -1 if there are none requests pending
-*/
-
-void queue_get_next_destination(QueueState * p_queue);
+int queue_check_if_drive_further(QueueState2 * p_queue);
 
 /**
  * @brief Checks if the elevator should stop on the floor or not
@@ -73,7 +65,7 @@ void queue_get_next_destination(QueueState * p_queue);
  * @return Stop Returns 1 if the elevator should stop at a floor, 0 otherwise
  
 */
-int queue_check_if_stop_floor(QueueState * p_queue);
+int queue_check_if_stop_floor(QueueState2 * p_queue);
 
 /**
  * @brief Sets the elevator input on one of the queue arrays. Increments the following queue count.
@@ -87,7 +79,7 @@ int queue_check_if_stop_floor(QueueState * p_queue);
  * @param[in, out] queue_count_inside Incremented by one if a request is put in the inside queue
 */
 
-void queue_get_user_input(QueueState * p_queue);
+void queue_get_user_input(QueueState2 * p_queue);
 
 /**
  * @brief Sets the motor state based on destination and current floor
@@ -95,10 +87,6 @@ void queue_get_user_input(QueueState * p_queue);
  * @param[in] destination The next place the elevator is heading
  * @param[in] current_floor The current floor measured by hardware
  */
-void queue_set_preferred_motor_state(QueueState * p_queue);
+void queue_set_preferred_motor_state(QueueState2 * p_queue);
 
-
-
-
-
-
+#endif

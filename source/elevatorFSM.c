@@ -7,7 +7,7 @@
 void elevator_fsm() {
     start_procedure_elevator();
     
-    queueState * queue = (queueState*) malloc( sizeof(*queue));
+    QueueState * queue = (QueueState*) malloc(sizeof(*queue));
     queue_default_init(queue);
 
     ElevatorState * elev_state = (ElevatorState *) malloc(sizeof(*elev_state));
@@ -28,8 +28,8 @@ void elevator_fsm() {
         
         else {
             queue_get_user_input(queue);  
-            if ((queue->destination == DEFAULT_DESTINATION || queue->destination == DESTINATION_WAITING)
-            && elev_state->door == DOOR_CLOSED)
+            if ((p_queue->destination == DEFAULT_DESTINATION || p_queue->destination == DESTINATION_WAITING)
+            && p_elev_state->door == DOOR_CLOSED)
             {
                 queue_get_next_destination(queue); //set next destination?
                 queue_set_preferred_motor_state(queue);
@@ -39,14 +39,14 @@ void elevator_fsm() {
                 stop_on_floor(elev_state, queue, door_open_timer); 
                 open_door(elev_state); // kanskje legge inn i stop_on_floor
                 queue_remove_orders_current_floor(queue);
-                queue->destination  = DESTINATION_WAITING;
+                p_queue->destination  = DESTINATION_WAITING;
                 
             }
             write_to_motor(elev_state, queue);
         }
         
         set_lights(elev_state, queue);
-        if (elev_state->door == DOOR_OPEN) { 
+        if (p_elev_state->door == DOOR_OPEN) { 
                 try_close_door(elev_state, door_open_timer); 
         }
     }  

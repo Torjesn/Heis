@@ -3,79 +3,73 @@
 #include "elevatorLogic.h"
 #include "elevatorFSM.h"
 
-void queue_default_init(queueState * queue) {
+void queue_default_init(QueueState * p_queue) {
     for (int i = 0; i < NUMBER_OF_FLOORS; ++i) {
-        queue->order_up[i] = 0;
-        queue->order_down[i] = 0; 
-        queue->order_inside[i] = 0;  
+        p_queue->order_up[i] = 0;
+        p_queue->order_down[i] = 0; 
+        p_queue->order_inside[i] = 0;  
     }
-    queue->count_outside = 0;
-    queue->count_inside = 0;
-    queue->destination = DEFAULT_DESTINATION;
-    queue->preferred_motor_state = HARDWARE_MOVEMENT_STOP;
-    queue->max_times_inside = MAX_TIMES_INSIDE;
+    p_queue->count_outside = 0;
+    p_queue->count_inside = 0;
+    p_queue->destination = DEFAULT_DESTINATION;
+    p_queue->preferred_motor_state = HARDWARE_MOVEMENT_STOP;
+    p_queue->max_times_inside = MAX_TIMES_INSIDE;
 }
 
-/*static void decrement_array_over_limit(int array[], int limit, int length) {
-    for (int i = 0; i < length; ++i) {
-        if(array[i] > limit) array[i] -=1;
-    }
-}*/
-
-void queue_remove_orders_current_floor(queueState * queue) {
-    if (queue->order_up[queue->current_floor]) {
+void queue_remove_orders_current_floor(QueueState * p_queue) {
+    if (p_queue->order_up[p_queue->current_floor]) {
         for (int i = 0; i < NUMBER_OF_FLOORS; ++i) {
-            if(queue->order_up[i] > queue->order_up[queue->current_floor]) --queue->order_up[i];
-            if(queue->order_down[i] > queue->order_up[queue->current_floor]) --queue->order_down[i];
+            if(p_queue->order_up[i] > p_queue->order_up[p_queue->current_floor]) --p_queue->order_up[i];
+            if(p_queue->order_down[i] > p_queue->order_up[p_queue->current_floor]) --p_queue->order_down[i];
         }
-        --queue->count_outside;
-        queue->order_up[queue->current_floor] = 0;
+        --p_queue->count_outside;
+        p_queue->order_up[p_queue->current_floor] = 0;
     }
     
-    if (queue->order_down[queue->current_floor]) {
+    if (p_queue->order_down[p_queue->current_floor]) {
         for (int i = 0; i < NUMBER_OF_FLOORS; ++i) {
-            if(queue->order_down[i] > queue->order_down[queue->current_floor]) --queue->order_down[i];
-            if(queue->order_up[i] > queue->order_down[queue->current_floor]) --queue->order_up[i];
+            if(p_queue->order_down[i] > p_queue->order_down[p_queue->current_floor]) --p_queue->order_down[i];
+            if(p_queue->order_up[i] > p_queue->order_down[p_queue->current_floor]) --p_queue->order_up[i];
         }
-        --queue->count_outside;
-        queue->order_down[queue->current_floor] = 0;
+        --p_queue->count_outside;
+        p_queue->order_down[p_queue->current_floor] = 0;
     }
     
-    if (queue->order_inside[queue->current_floor]) {
+    if (p_queue->order_inside[p_queue->current_floor]) {
         for (int i = 0; i < NUMBER_OF_FLOORS; ++i) {
-            if(queue->order_inside[i] > queue->order_inside[queue->current_floor]) queue->order_inside[i] -=1;
+            if(p_queue->order_inside[i] > p_queue->order_inside[p_queue->current_floor]) p_queue->order_inside[i] -=1;
         }
-        --queue->count_inside;
-        queue->order_inside[queue->current_floor] = 0;
+        --p_queue->count_inside;
+        p_queue->order_inside[p_queue->current_floor] = 0;
     }
 }
 
-void queue_get_next_destination(queueState * queue) {
-        if (queue->max_times_inside){
+void queue_get_next_destination(QueueState * p_queue) {
+        if (p_queue->max_times_inside){
             for(int i = 0; i< NUMBER_OF_FLOORS; ++i) {
-                if (queue->order_inside[i] == 1) {
-                    queue->destination = i;
-                    queue->max_times_inside -= 1;
+                if (p_queue->order_inside[i] == 1) {
+                    p_queue->destination = i;
+                    p_queue->max_times_inside -= 1;
                     return;
                 }
             }
         }
         for(int i = 0; i< NUMBER_OF_FLOORS; ++i) {
-            if (queue->order_up[i] == 1 || queue->order_down[i] == 1) {
-                queue->destination = i;
+            if (p_queue->order_up[i] == 1 || p_queue->order_down[i] == 1) {
+                p_queue->destination = i;
                 return;
             }
         }
-        queue->max_times_inside = MAX_TIMES_INSIDE;
-        queue->destination = DEFAULT_DESTINATION;
+        p_queue->max_times_inside = MAX_TIMES_INSIDE;
+        p_queue->destination = DEFAULT_DESTINATION;
 }
 
-int queue_check_if_stop_floor(queueState* queue) {
+int queue_check_if_stop_floor(QueueState* p_queue) {
     if(
-        queue->order_inside[queue->current_floor_not_between]
-        || queue->destination == queue->current_floor_not_between
-        || (queue->order_up[queue->current_floor_not_between] && queue->preferred_motor_state ==  HARDWARE_MOVEMENT_UP) 
-        || (queue->order_down[queue->current_floor_not_between] && queue->preferred_motor_state ==  HARDWARE_MOVEMENT_DOWN)
+        p_queue->order_inside[p_queue->current_floor_not_between]
+        || p_queue->destination == p_queue->current_floor_not_between
+        || (p_queue->order_up[p_queue->current_floor_not_between] && p_queue->preferred_motor_state ==  HARDWARE_MOVEMENT_UP) 
+        || (p_queue->order_down[p_queue->current_floor_not_between] && p_queue->preferred_motor_state ==  HARDWARE_MOVEMENT_DOWN)
      ) 
     {       
         return 1;
@@ -83,35 +77,35 @@ int queue_check_if_stop_floor(queueState* queue) {
     return 0;
 }
 
-void queue_get_user_input(queueState * queue) {  
+void queue_get_user_input(QueueState *p_queue) {  
     for (int i = 0; i < NUMBER_OF_FLOORS; ++i) {
-        if (queue->current_floor_not_between != i || queue->destination == DEFAULT_DESTINATION) { //skal ikke ta inn ordre på nåværende etasje
+        if (p_queue->current_floor_not_between != i || p_queue->destination == DEFAULT_DESTINATION) { //skal ikke ta inn ordre på nåværende etasje
             if(hardware_read_order(i, HARDWARE_ORDER_UP)) {
-                if(queue->order_up[i] == 0) {
-                    queue->order_up[i] = ++queue->count_outside;
+                if(p_queue->order_up[i] == 0) {
+                    p_queue->order_up[i] = ++p_queue->count_outside;
                 }
             }
 
             if(hardware_read_order(i, HARDWARE_ORDER_DOWN)) { 
-                if(queue->order_down[i] == 0) {
-                    queue->order_down[i] = ++queue->count_outside;
+                if(p_queue->order_down[i] == 0) {
+                    p_queue->order_down[i] = ++p_queue->count_outside;
                 }
             }
             
             if(hardware_read_order(i, HARDWARE_ORDER_INSIDE)) {
-                if(queue->order_inside[i] == 0) {
-                    queue->order_inside[i] = ++queue->count_inside;
+                if(p_queue->order_inside[i] == 0) {
+                    p_queue->order_inside[i] = ++p_queue->count_inside;
                 }
             }
         }
     }
 }
 
-void queue_set_preferred_motor_state(queueState *queue) { 
-    if (queue->destination == DEFAULT_DESTINATION) queue->preferred_motor_state = HARDWARE_MOVEMENT_STOP;
-    else if (queue->current_floor > queue->destination) queue->preferred_motor_state = HARDWARE_MOVEMENT_DOWN;
-    else if (queue->current_floor < queue->destination) queue->preferred_motor_state = HARDWARE_MOVEMENT_UP;
-    else queue->preferred_motor_state = HARDWARE_MOVEMENT_STOP;
+void queue_set_preferred_motor_state(QueueState *p_queue) { 
+    if (p_queue->destination == DEFAULT_DESTINATION) p_queue->preferred_motor_state = HARDWARE_MOVEMENT_STOP;
+    else if (p_queue->current_floor > p_queue->destination) p_queue->preferred_motor_state = HARDWARE_MOVEMENT_DOWN;
+    else if (p_queue->current_floor < p_queue->destination) p_queue->preferred_motor_state = HARDWARE_MOVEMENT_UP;
+    else p_queue->preferred_motor_state = HARDWARE_MOVEMENT_STOP;
 }
 
 

@@ -1,8 +1,9 @@
 /** @file 
  * @brief A file with all the hardware-functions we use
  * */
-#pragma once
-#include "elevatorCue.h"
+#ifndef ELEVATOR_FSM
+#define ELEVATOR_FSM
+#include "queueV2.h"
 #include "hardware.h"
 #include <time.h>
 
@@ -13,22 +14,12 @@ typedef enum {
     DOOR_CLOSED
 } DoorState;
 
-typedef struct { 
-    DoorState door; 
-    int current_floor; 
-    HardwareMovement movement;
-} ElevatorState; 
-
-//statene våre: doorState, hardwareMovement for motor
-
-//Burde vi ha alle de funksjoene vi kaller knyttet til hardware som output-parametere?
-//tja, nei, fordi vi sender jo ikke noe ut? 
 
 /**
  * @brief The elevator will go down until it sees a valid floor
 */
 
-void start_procedure_elevator();
+void sethw_start_procedure_elevator();
 
 /**
  * @brief Sets the lights of the elevator 
@@ -37,17 +28,7 @@ void start_procedure_elevator();
  * @param [in] elev_state Door lights are set based on the door state
  */
 
-void set_lights(ElevatorState * elev_state, QueueState * queue);
-
-
-/**
- * @brief Set the deafult elevator_states
- * @param[out] elev_state.current_floor Set to deafult state, -1
- * @param[out] elev_state.door Set to closed
- * @param[out] elev_state.movement Set to stop
- */
-void init_elevator_states(ElevatorState* elev_state);
-
+void  sethw_lights(DoorState * door, QueueState2 * p_queue);
 
 /**
  * @brief Tries to close the door, will be stopped if the door_open_timer is bigger than real_time.
@@ -57,16 +38,7 @@ void init_elevator_states(ElevatorState* elev_state);
  * @param[out] elev_state.door Closed if conditions are met
  */
 
-void try_close_door(ElevatorState* elev_state, clock_t* door_open_timer);
-
-/**
- * @brief Opens the door if the elevator is at rest at a floor.
- * @param[in] elev_state.movement Checks if the elevator is moving
- * @param[in] elev_state.current_floor Checks if the elevator is at a floor
- * @param[out] elev_state.door Opened if conditions are met
- */
-
-void open_door(ElevatorState* elev_state);
+void sethw_try_close_door(DoorState p_door, clock_t* door_open_timer);
 
 
 /**
@@ -74,7 +46,7 @@ void open_door(ElevatorState* elev_state);
  * @param[in] elev_state.door The motor will halt if door is open
  * @param[in] queue.prefered_motor_state If door is closed, the elevator will follow the queue
  */
-void write_to_motor(ElevatorState* elev_state, QueueState* queue);
+void sethw_motor(DoorState p_door, QueueState2* queue);
 
 /**
  * @brief Stops motor, opens doors and executes orders at the floor.
@@ -83,7 +55,7 @@ void write_to_motor(ElevatorState* elev_state, QueueState* queue);
  * @param[out] queue Deletes all orders on the current floor, 
  * and decrement all orders higher than the current floor
  */
-void stop_on_floor(ElevatorState* elev_state,  QueueState* queue, clock_t* door_open_timer);
+void sethw_stop_on_floor(DoorState p_door, clock_t* door_open_timer);
 
 /**
  * @brief Procedure for stop button, motor stops, 
@@ -92,18 +64,6 @@ void stop_on_floor(ElevatorState* elev_state,  QueueState* queue, clock_t* door_
  * @param[out] queue Deletes the queue
  * @param[out] elev_state.door Opens door if on floor
  */
-void stop_button_procedure(ElevatorState* elev_state, QueueState* queue);
+void sethw_stop_button_procedure(DoorState p_door, QueueState2* queue);
 
-/** 
- * @brief Sets the current_floor state of the queue. 
- * Does not change between floors.
- * @param[out] current_floor The current floor of the queue is set based on hardware.
-*/
-void get_current_floor_state(ElevatorState* elev_state, QueueState *queue);
-
-int read_floor();
-
-
-
-
-
+#endif

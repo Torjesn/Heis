@@ -19,72 +19,72 @@ void start_procedure_elevator() {
     }
 }
 
-void set_lights(ElevatorState* elev_state, queueState * queue){ 
+void set_lights(ElevatorState* p_elev_state, QueueState * p_queue){ 
     hardware_command_stop_light(hardware_read_stop_signal()); 
-    if (elev_state->door == DOOR_OPEN) hardware_command_door_open(1);
+    if (p_elev_state->door == DOOR_OPEN) hardware_command_door_open(1);
     else hardware_command_door_open(0);
     
     for (int i = 0; i < NUMBER_OF_FLOORS; i++)
         {
-            hardware_command_order_light(i,HARDWARE_ORDER_INSIDE, queue->order_inside[i]);
-            hardware_command_order_light(i,HARDWARE_ORDER_UP, queue->order_up[i]);
-            hardware_command_order_light(i, HARDWARE_ORDER_DOWN, queue->order_down[i]);
+            hardware_command_order_light(i,HARDWARE_ORDER_INSIDE, p_queue->order_inside[i]);
+            hardware_command_order_light(i,HARDWARE_ORDER_UP, p_queue->order_up[i]);
+            hardware_command_order_light(i, HARDWARE_ORDER_DOWN, p_queue->order_down[i]);
         }
-    hardware_command_floor_indicator_on(queue->current_floor);
+    hardware_command_floor_indicator_on(p_queue->current_floor);
 
 }
 
-void init_elevator_states(ElevatorState* elev_state) {
-    elev_state->door = DOOR_CLOSED;
-    elev_state->movement = HARDWARE_MOVEMENT_STOP;
+void init_elevator_states(ElevatorState* p_elev_state) {
+    p_elev_state->door = DOOR_CLOSED;
+    p_elev_state->movement = HARDWARE_MOVEMENT_STOP;
 }
 
-void try_close_door(ElevatorState* elev_state, clock_t* door_open_timer) {
+void try_close_door(ElevatorState* p_elev_state, clock_t* p_door_open_timer) {
     if (hardware_read_obstruction_signal() || hardware_read_stop_signal()) {
-        *door_open_timer = clock() + SECONDS_WAIT_DOOR * CLOCKS_PER_SEC;
+        *p_door_open_timer = clock() + SECONDS_WAIT_DOOR * CLOCKS_PER_SEC;
     }
     
-    if (clock()>= *door_open_timer ) {
-        elev_state->door = DOOR_CLOSED;
-        *door_open_timer = clock();
+    if (clock()>= *p_door_open_timer ) {
+        p_elev_state->door = DOOR_CLOSED;
+        *p_door_open_timer = clock();
     }
 }
 
-void open_door(ElevatorState* elev_state) {
+void open_door(ElevatorState* p_elev_state) {
     if (
-        elev_state->movement == HARDWARE_MOVEMENT_STOP
-        && elev_state->current_floor >= 0
-    ) elev_state->door = DOOR_OPEN;
+        p_elev_state->movement == HARDWARE_MOVEMENT_STOP
+        && p_elev_state->current_floor >= 0
+    ) p_elev_state->door = DOOR_OPEN;
 }
 
 
-void write_to_motor( ElevatorState* elev_state, queueState* queue) {
-    if (elev_state->door == DOOR_OPEN) elev_state->movement = HARDWARE_MOVEMENT_STOP;
-    else elev_state->movement = queue->preferred_motor_state; 
-    hardware_command_movement(elev_state->movement);
+void write_to_motor( ElevatorState* p_elev_state, QueueState* p_queue) {
+    if (p_elev_state->door == DOOR_OPEN) p_elev_state->movement = HARDWARE_MOVEMENT_STOP;
+    else p_elev_state->movement = p_queue->preferred_motor_state; 
+    hardware_command_movement(p_elev_state->movement);
 } 
 
-void stop_on_floor(ElevatorState* elev_state,  queueState* queue, clock_t* door_open_timer) {
-    *door_open_timer = clock() + SECONDS_WAIT_DOOR * CLOCKS_PER_SEC;
-    elev_state->movement = HARDWARE_MOVEMENT_STOP;
+void stop_on_floor(ElevatorState* p_elev_state, clock_t* p_door_open_timer) {
+    *p_door_open_timer = clock() + SECONDS_WAIT_DOOR * CLOCKS_PER_SEC;
+    p_elev_state->movement = HARDWARE_MOVEMENT_STOP;
 }
 
 
-void stop_button_procedure(ElevatorState* elev_state, queueState* queue) {
-    elev_state->movement = HARDWARE_MOVEMENT_STOP;
-    hardware_command_movement(elev_state->movement); //kan nok løses på en penere måte
-    queue_default_init(queue);
-    if (elev_state->current_floor >= 0) {
-        elev_state->door = DOOR_OPEN;
+void stop_button_procedure(ElevatorState* p_elev_state, QueueState* p_queue) {
+    p_elev_state->movement = HARDWARE_MOVEMENT_STOP;
+    hardware_command_movement(p_elev_state->movement); //kan nok løses på en penere måte
+    queue_default_init(p_queue);
+    if (p_elev_state->current_floor >= 0) {
+        p_elev_state->door = DOOR_OPEN;
     }
 }
 
-void get_current_floor_state(ElevatorState * elev_state, queueState * queue) {
+void get_current_floor_state(ElevatorState * p_elev_state, QueueState * p_queue) {
     int floor = read_floor();
-    elev_state->current_floor = floor;
-    queue->current_floor_not_between = floor;
+    p_elev_state->current_floor = floor;
+    p_queue->current_floor_not_between = floor;
     if (floor >= 0) {
-        queue->current_floor = floor;
+        p_queue->current_floor = floor;
     }
 }
 
