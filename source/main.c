@@ -2,9 +2,10 @@
 #include <stdlib.h>
 #include <signal.h>
 #include "hardware.h"
-#include "elevatorLogic.h"
-#include "elevatorCue.h"
-#include "elevatorFSM.h"
+//#include "elevatorLogic.h"
+//#include "elevatorCue.h"
+//#include "elevatorFSM.h"
+#include "elevatorFSM_2.h"
 
 
 static void sigint_handler(int sig){
@@ -24,7 +25,7 @@ int main(){
 
     signal(SIGINT, sigint_handler);
     
-    elevator_fsm();
+    elevator_fsm2();
 
 
     return 0;

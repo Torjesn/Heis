@@ -3,8 +3,8 @@
 * @brief The queue system of the elevator
 
 */
-#ifndef QUEUE_SYSEM.H
-#define QUEUE_SYSTEM.H
+#ifndef QUEUE_SYSTEM
+#define QUEUE_SYSTEM
 
 #include "hardware.h"
 #define NUMBER_OF_FLOORS 4
@@ -20,9 +20,9 @@ typedef struct {
     int order_up[NUMBER_OF_FLOORS]; /** < Array for the orders going up from the outside */
     int order_down[NUMBER_OF_FLOORS]; /** < Array for the orders going down from the outside */
     int order_inside[NUMBER_OF_FLOORS]; /** < Orders from the inside */
-    int orders_total[NUMBER_OF_FLOORS];
     int saved_floor; /** < The current floor, only changes on floors, not between */
     int current_floor;
+    int further_floor;
     HardwareMovement preferred_motor_state; /** < What the queue wants the direction of the motor to be */
 } QueueState2; 
 

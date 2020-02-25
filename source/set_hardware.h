@@ -38,7 +38,7 @@ void  sethw_lights(DoorState * door, QueueState2 * p_queue);
  * @param[out] elev_state.door Closed if conditions are met
  */
 
-void sethw_try_close_door(DoorState p_door, clock_t* door_open_timer);
+void sethw_try_close_door(DoorState* p_door, clock_t* door_open_timer);
 
 
 /**
@@ -46,7 +46,7 @@ void sethw_try_close_door(DoorState p_door, clock_t* door_open_timer);
  * @param[in] elev_state.door The motor will halt if door is open
  * @param[in] queue.prefered_motor_state If door is closed, the elevator will follow the queue
  */
-void sethw_motor(DoorState p_door, QueueState2* queue);
+void sethw_motor(DoorState* p_door, QueueState2* queue);
 
 /**
  * @brief Stops motor, opens doors and executes orders at the floor.
@@ -55,7 +55,7 @@ void sethw_motor(DoorState p_door, QueueState2* queue);
  * @param[out] queue Deletes all orders on the current floor, 
  * and decrement all orders higher than the current floor
  */
-void sethw_stop_on_floor(DoorState p_door, clock_t* door_open_timer);
+void sethw_stop_on_floor(DoorState* p_door, clock_t* door_open_timer);
 
 /**
  * @brief Procedure for stop button, motor stops, 
@@ -64,6 +64,6 @@ void sethw_stop_on_floor(DoorState p_door, clock_t* door_open_timer);
  * @param[out] queue Deletes the queue
  * @param[out] elev_state.door Opens door if on floor
  */
-void sethw_stop_button_procedure(DoorState p_door, QueueState2* queue);
+void sethw_stop_button_procedure(DoorState* p_door, QueueState2* queue);
 
 #endif
