@@ -1,8 +1,8 @@
 /** @file 
  * @brief A file with all the hardware-functions we use
  * */
-#ifndef ELEVATOR_FSM
-#define ELEVATOR_FSM
+#ifndef SET_HARDWARE
+#define SET_HARDWARE
 #include "queueV2.h"
 #include "hardware.h"
 #include <time.h>

@@ -4,7 +4,7 @@
 #include "queueV2.h"
 
 static int read_floor() { // må gjøre noe fornuftig med hvor denne er plassert
-    for (int i = 0; i < NUMBER_OF_FLOORS; ++i ) {
+    for (int i = 0; i < HARDWARE_NUMBER_OF_FLOORS; ++i ) {
         if(hardware_read_floor_sensor(i)) return i;
     }
     return -1;
@@ -25,7 +25,7 @@ void sethw_lights(DoorState * p_door, QueueState2 * p_queue){
     if (*p_door == DOOR_OPEN) hardware_command_door_open(1);
     else hardware_command_door_open(0);
     
-    for (int i = 0; i < NUMBER_OF_FLOORS; i++)
+    for (int i = 0; i < HARDWARE_NUMBER_OF_FLOORS; i++)
         {
             hardware_command_order_light(i,HARDWARE_ORDER_INSIDE, p_queue->order_inside[i]);
             hardware_command_order_light(i,HARDWARE_ORDER_UP, p_queue->order_up[i]);
