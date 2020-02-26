@@ -36,13 +36,8 @@ void elevator_fsm2() {
                 queue_remove_orders_current_floor(p_queue);
             }
 
-            if (p_queue->destination == p_queue->saved_floor) {
-                p_queue->destination = -1;
-                hardware_command_movement(HARDWARE_MOVEMENT_STOP);
-                p_queue->preferred_motor_state = HARDWARE_MOVEMENT_STOP;
-            }
-
-            if (p_queue->destination == -1) { //skal både ta en idle og en nettop tatt
+            queue_if_destination_reached_set_deafult(p_queue);
+            if (p_queue->destination == DEFAULT_FLOOR) { //skal både ta en idle og en nettop tatt
                 queue_set_preferred_motor_state(p_queue);
                 queue_set_destination(p_queue);
             }
