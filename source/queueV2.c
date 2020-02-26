@@ -1,7 +1,7 @@
 #include "hardware.h"
 #include "queueV2.h"
 
-static int read_floor() {
+int read_floor() {
     for (int i = 0; i <  HARDWARE_NUMBER_OF_FLOORS; ++i ) { //må gjøres noe med
         if(hardware_read_floor_sensor(i)) return i;
     }
@@ -58,12 +58,13 @@ int queue_check_if_stop_floor(QueueState2* p_queue) {
 
 void queue_get_user_input(QueueState2 *p_queue) {  
     for (int floor = 0; floor < HARDWARE_NUMBER_OF_FLOORS; ++floor) {
-        //kan ha statement her
-        if(hardware_read_order(floor, HARDWARE_ORDER_UP) && (floor != p_queue->current_floor || p_queue->preferred_motor_state == HARDWARE_MOVEMENT_STOP))  p_queue->order_up[floor] = 1; //dette er lagt til siden sist det fungerte, klarer ikke å åpne heisen slik, må kankjse legge til motor state også
-                   
-        if(hardware_read_order(floor, HARDWARE_ORDER_DOWN) && (floor != p_queue->current_floor || p_queue->preferred_motor_state == HARDWARE_MOVEMENT_STOP)) p_queue->order_down[floor] = 1;
-            
-        if(hardware_read_order(floor, HARDWARE_ORDER_INSIDE) && (floor != p_queue->current_floor || p_queue->preferred_motor_state == HARDWARE_MOVEMENT_STOP)) p_queue->order_inside[floor] = 1;
+        if (floor != p_queue->current_floor || p_queue->preferred_motor_state == HARDWARE_MOVEMENT_STOP) {
+            if(hardware_read_order(floor, HARDWARE_ORDER_UP))  p_queue->order_up[floor] = 1; 
+                    
+            if(hardware_read_order(floor, HARDWARE_ORDER_DOWN)) p_queue->order_down[floor] = 1;
+                
+            if(hardware_read_order(floor, HARDWARE_ORDER_INSIDE)) p_queue->order_inside[floor] = 1;
+        }
     }         
 }
 
@@ -110,7 +111,6 @@ void queue_if_destination_reached_set_deafult(QueueState2 *p_queue) {
     if (p_queue->current_floor != DEFAULT_FLOOR) {
         if (p_queue->destination == p_queue->current_floor) {
             p_queue->destination = DEFAULT_FLOOR;
-            hardware_command_movement(HARDWARE_MOVEMENT_STOP); //burde fjernes hvis det fungerer uten
             p_queue->preferred_motor_state = HARDWARE_MOVEMENT_STOP;
         }
     }

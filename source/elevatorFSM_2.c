@@ -1,4 +1,4 @@
-#include "elevatorFSM.h"
+#include "elevatorFSM_2.h"
 #include "queueV2.h"
 #include "set_hardware.h"
 #include <time.h>
@@ -25,19 +25,16 @@ void elevator_fsm2() {
         } 
         
         else {
-            queue_get_user_input(p_queue); //skjekk floor her
+            queue_get_user_input(p_queue);
 
-            if (*p_door == DOOR_OPEN) queue_remove_orders_current_floor(p_queue); //fjerne alt som kommer inn, hvis vi skjekker floor trenger vi fort ikke denne
-            
-            
             if (queue_check_if_stop_floor(p_queue)) {
                 sethw_stop_on_floor(p_door, p_door_open_timer); 
-                queue_set_destination(p_queue); //Må være før remove orders for å finne den siste
+                queue_set_destination(p_queue); 
                 queue_remove_orders_current_floor(p_queue);
             }
 
             queue_if_destination_reached_set_deafult(p_queue);
-            if (p_queue->destination == DEFAULT_FLOOR) { //skal både ta en idle og en nettop tatt
+            if (p_queue->destination == DEFAULT_FLOOR) {
                 queue_set_preferred_motor_state(p_queue);
                 queue_set_destination(p_queue);
             }

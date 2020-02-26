@@ -92,6 +92,8 @@ void queue_set_destination(QueueState2 *p_queue);
 
 void queue_if_destination_reached_set_deafult(QueueState2 *p_queue);
 
+//Må doxes
+int read_floor();
 
 #endif
 

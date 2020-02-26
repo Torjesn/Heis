@@ -3,14 +3,6 @@
 #include "set_hardware.h"
 #include "queueV2.h"
 
-static int read_floor() { // må gjøre noe fornuftig med hvor denne er plassert
-    for (int i = 0; i < HARDWARE_NUMBER_OF_FLOORS; ++i ) {
-        if(hardware_read_floor_sensor(i)) return i;
-    }
-    return -1;
-}
-
-
 void sethw_start_procedure_elevator() {
     int floor_level =  read_floor();
     
@@ -53,13 +45,12 @@ void sethw_motor(DoorState * p_door, QueueState2 * p_queue) {
 void sethw_stop_on_floor(DoorState * p_door, clock_t* p_door_open_timer) {
     *p_door_open_timer = clock() + SECONDS_WAIT_DOOR * CLOCKS_PER_SEC;
     *p_door = DOOR_OPEN;
-    //burde motor stoppes dirkte her? Ikke nødvendig, men kanskje bra for lesbarhet?
 }
 
 void sethw_stop_button_procedure(DoorState * p_door, QueueState2 * p_queue) {
     hardware_command_movement(HARDWARE_MOVEMENT_STOP);
     queue_default_init(p_queue);
-    if (p_queue->current_floor >= 0) {
+    if (p_queue->current_floor > DEFAULT_FLOOR) {
         *p_door = DOOR_OPEN;
     }
 }

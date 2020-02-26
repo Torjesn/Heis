@@ -2,9 +2,6 @@
 #include <stdlib.h>
 #include <signal.h>
 #include "hardware.h"
-//#include "elevatorLogic.h"
-//#include "elevatorCue.h"
-//#include "elevatorFSM.h"
 #include "elevatorFSM_2.h"
 
 
