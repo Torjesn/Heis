@@ -22,7 +22,7 @@ typedef struct {
     int order_inside[NUMBER_OF_FLOORS]; /** < Orders from the inside */
     int saved_floor; /** < The current floor, only changes on floors, not between */
     int current_floor;
-    int further_floor;
+    int destination;
     HardwareMovement preferred_motor_state; /** < What the queue wants the direction of the motor to be */
 } QueueState2; 
 
@@ -51,9 +51,6 @@ void queue_default_init(QueueState2 * p_queue);
 
 */
 void queue_remove_orders_current_floor(QueueState2 * p_queue);
-
-
-int queue_check_if_drive_further(QueueState2 * p_queue);
 
 /**
  * @brief Checks if the elevator should stop on the floor or not
@@ -88,5 +85,7 @@ void queue_get_user_input(QueueState2 * p_queue);
  * @param[in] current_floor The current floor measured by hardware
  */
 void queue_set_preferred_motor_state(QueueState2 * p_queue);
+
+void queue_set_destination(QueueState2 *p_queue);
 
 #endif

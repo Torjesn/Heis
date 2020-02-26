@@ -36,7 +36,7 @@ void sethw_lights(DoorState * door, QueueState2 * p_queue){
 
 void sethw_try_close_door(DoorState * p_door, clock_t* p_door_open_timer) {
     if (hardware_read_obstruction_signal() || hardware_read_stop_signal()) {
-        //*p_door_open_timer = clock() + SECONDS_WAIT_DOOR * CLOCKS_PER_SEC;
+        *p_door_open_timer = clock() + SECONDS_WAIT_DOOR * CLOCKS_PER_SEC;
     }
     
     if (clock()>= *p_door_open_timer ) {
@@ -51,7 +51,7 @@ void sethw_motor(DoorState * p_door, QueueState2 * p_queue) {
 } 
 
 void sethw_stop_on_floor(DoorState * p_door, clock_t* p_door_open_timer) {
-    //*p_door_open_timer = clock() + SECONDS_WAIT_DOOR * CLOCKS_PER_SEC;
+    *p_door_open_timer = clock() + SECONDS_WAIT_DOOR * CLOCKS_PER_SEC;
     *p_door = DOOR_OPEN;
 }
 
