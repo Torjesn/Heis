@@ -31,7 +31,7 @@ void sethw_lights(DoorState * door, QueueState2 * p_queue){
             hardware_command_order_light(i,HARDWARE_ORDER_UP, p_queue->order_up[i]);
             hardware_command_order_light(i, HARDWARE_ORDER_DOWN, p_queue->order_down[i]);
         }
-    hardware_command_floor_indicator_on(p_queue->saved_floor);
+    if (p_queue->current_floor > -1) hardware_command_floor_indicator_on(p_queue->current_floor);
 }
 
 void sethw_try_close_door(DoorState * p_door, clock_t* p_door_open_timer) {

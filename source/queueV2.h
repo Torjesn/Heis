@@ -21,6 +21,7 @@ typedef struct {
     int order_down[NUMBER_OF_FLOORS]; /** < Array for the orders going down from the outside */
     int order_inside[NUMBER_OF_FLOORS]; /** < Orders from the inside */
     int saved_floor; /** < The current floor, only changes on floors, not between */
+    int floor_with_states_between;
     int current_floor;
     int destination;
     HardwareMovement preferred_motor_state; /** < What the queue wants the direction of the motor to be */
