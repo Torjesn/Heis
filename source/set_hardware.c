@@ -4,7 +4,7 @@
 #include "queue.h"
 
 void sethw_start_procedure_elevator() {
-    int floor_level =  read_floor();
+    int floor_level =  hardware_read_floor();
     
     while (floor_level == DEFAULT_FLOOR) {
         floor_level =  hardware_read_floor();
