@@ -53,7 +53,7 @@ void sethw_motor(DoorState* p_door, QueueState* p_queue);
  * @param[out] p_door_open_timer Sets the door timer 3 seconds ahead of real time
  * @param[out] p_door Opens the door
  */
-void sethw_stop_on_floor(DoorState* p_door, clock_t* p_door_open_timer);
+void sethw_open_door(DoorState* p_door, clock_t* p_door_open_timer);
 
 /**
  * @brief Procedure for stop button, stops motor, 

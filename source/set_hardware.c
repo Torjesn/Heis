@@ -42,7 +42,7 @@ void sethw_motor(DoorState * p_door, QueueState * p_queue) {
     else hardware_command_movement(p_queue->preferred_motor_state);
 } 
 
-void sethw_stop_on_floor(DoorState * p_door, clock_t* p_door_open_timer) {
+void sethw_open_door(DoorState * p_door, clock_t* p_door_open_timer) {
     *p_door_open_timer = clock() + SECONDS_WAIT_DOOR * CLOCKS_PER_SEC;
     *p_door = DOOR_OPEN;
 }

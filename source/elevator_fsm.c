@@ -28,7 +28,7 @@ void elevator_fsm() {
             queue_get_user_input(p_queue);
 
             if (queue_check_if_stop_floor(p_queue)) {
-                sethw_stop_on_floor(p_door, p_door_open_timer); 
+                sethw_open_door(p_door, p_door_open_timer); 
                 queue_set_destination(p_queue); 
                 queue_remove_orders_current_floor(p_queue);
             }
