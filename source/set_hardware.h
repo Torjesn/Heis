@@ -3,7 +3,7 @@
  * */
 #ifndef SET_HARDWARE
 #define SET_HARDWARE
-#include "queueV2.h"
+#include "queue.h"
 #include "hardware.h"
 #include <time.h>
 
@@ -28,7 +28,7 @@ void sethw_start_procedure_elevator();
  * @param [in] p_door Door light is set based on the door state
  */
 
-void  sethw_lights(DoorState * p_door, QueueState2 * p_queue);
+void  sethw_lights(DoorState * p_door, QueueState * p_queue);
 
 /**
  * @brief Tries to close the door, will be stopped if the timer is bigger than the real clock time.
@@ -46,7 +46,7 @@ void sethw_try_close_door(DoorState* p_door, clock_t* p_door_open_timer);
  * @param[in] p_door The motor will halt if door is open
  * @param[in] p_queue.prefered_motor_state If door is closed, the motor will follow wishes of the queue
  */
-void sethw_motor(DoorState* p_door, QueueState2* p_queue);
+void sethw_motor(DoorState* p_door, QueueState* p_queue);
 
 /**
  * @brief Sets the door timer 3 seconds ahead of real clock time, opens the door
@@ -61,6 +61,6 @@ void sethw_stop_on_floor(DoorState* p_door, clock_t* p_door_open_timer);
  * @param[out] p_queue Deletes the queue
  * @param[out] p_door Opens door if on floor
  */
-void sethw_stop_button_procedure(DoorState* p_door, QueueState2* queue);
+void sethw_stop_button_procedure(DoorState* p_door, QueueState* queue);
 
 #endif

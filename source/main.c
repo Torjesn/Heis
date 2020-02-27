@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <signal.h>
 #include "hardware.h"
-#include "elevatorFSM_2.h"
+#include "elevator_fsm.h"
 
 
 static void sigint_handler(int sig){

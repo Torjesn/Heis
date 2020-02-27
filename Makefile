@@ -1,4 +1,4 @@
-SOURCES := main.c set_hardware.c queueV2.c elevatorFSM_2.c
+SOURCES := main.c set_hardware.c queue.c elevator_fsm.c
 
 SOURCE_DIR := source
 BUILD_DIR := build

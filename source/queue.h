@@ -25,7 +25,7 @@ typedef struct {
     int current_floor;
     int destination;
     HardwareMovement preferred_motor_state; /** < What the queue wants the direction of the motor to be */
-} QueueState2; 
+} QueueState; 
 
 /** 
  * @brief Sets the current_floor state of the queue. 
@@ -34,7 +34,7 @@ typedef struct {
  * @param[out] p_queue.saved_floor State saving floor counter of the queue set based on hardware
 */
 
-void queue_get_current_floor(QueueState2 * p_queue);
+void queue_get_current_floor(QueueState * p_queue);
 
 /**
  * @brief Initilizes the queue
@@ -42,14 +42,14 @@ void queue_get_current_floor(QueueState2 * p_queue);
  * the destination set to default
  *
 */
-void queue_default_init(QueueState2 * p_queue);
+void queue_default_init(QueueState * p_queue);
 
 /**
  * @brief Removes the orders of the current floor in the queue
  * 
  * @param[out] p_queue The queue arrays are set to zero at current floor //based on current floor skal vi si det?
  */
-void queue_remove_orders_current_floor(QueueState2 * p_queue);
+void queue_remove_orders_current_floor(QueueState * p_queue);
 
 /**
  * @brief Checks if the elevator should stop on the floor or not
@@ -57,7 +57,7 @@ void queue_remove_orders_current_floor(QueueState2 * p_queue);
  * @return Stop Returns 1 if the elevator should stop at a floor, 0 otherwise
  
 */
-int queue_check_if_stop_floor(QueueState2 * p_queue);
+int queue_check_if_stop_floor(QueueState * p_queue);
 
 /**
  * @brief Sets the elevator input on one of the queue arrays.
@@ -65,14 +65,14 @@ int queue_check_if_stop_floor(QueueState2 * p_queue);
  * Orders will not be taken if the elevator is at a floor, and have a wanted motor direction
 */
 
-void queue_get_user_input(QueueState2 * p_queue);
+void queue_get_user_input(QueueState * p_queue);
 
 /**
  * @brief Checks if the queue has any orders, and sets the motor state accordingly to reach them.
  * @param[out] p_queue.preferred_motor_state Sets prefered motor state based on the queue
  * @param[in] p_queue Compares the floor_arrays and saved_floor state to find prefered motorstate
  */
-void queue_set_preferred_motor_state(QueueState2 * p_queue);
+void queue_set_preferred_motor_state(QueueState * p_queue);
 
 
 /**
@@ -81,7 +81,7 @@ void queue_set_preferred_motor_state(QueueState2 * p_queue);
  * @param[out] p_queue.preferred_motor_state Sets destination based on the queue
  * @param[in] p_queue Compares the floor_arrays and the prefered_motor_state state to find destination
  */
-void queue_set_destination(QueueState2 *p_queue);
+void queue_set_destination(QueueState *p_queue);
 
 
 /**
@@ -90,7 +90,7 @@ void queue_set_destination(QueueState2 *p_queue);
  * @param[in] p_queue.current_floor Compared to destination
  */
 
-void queue_if_destination_reached_set_deafult(QueueState2 *p_queue);
+void queue_if_destination_reached_set_deafult(QueueState *p_queue);
 
 //Må doxes
 int read_floor();
