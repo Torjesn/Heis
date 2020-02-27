@@ -7,7 +7,7 @@ void sethw_start_procedure_elevator() {
     int floor_level =  read_floor();
     
     while (floor_level == DEFAULT_FLOOR) {
-        floor_level =  read_floor();
+        floor_level =  hardware_read_floor();
         hardware_command_movement(HARDWARE_MOVEMENT_DOWN);
     }
 }

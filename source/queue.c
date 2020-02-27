@@ -1,15 +1,9 @@
 #include "hardware.h"
 #include "queue.h"
 
-int read_floor() {
-    for (int floor = 0; floor <  HARDWARE_NUMBER_OF_FLOORS; ++floor ) {
-        if(hardware_read_floor_sensor(floor)) return floor;
-    }
-    return DEFAULT_FLOOR;
-}
 
 void queue_get_current_floor(QueueState * p_queue) {
-    int floor_read = read_floor();
+    int floor_read = hardware_read_floor();
     p_queue->current_floor = floor_read;
     
      if (floor_read != DEFAULT_FLOOR) {

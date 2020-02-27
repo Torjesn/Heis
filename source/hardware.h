@@ -10,6 +10,7 @@
 #ifndef HARDWARE_H
 #define HARDWARE_H
 #define HARDWARE_NUMBER_OF_FLOORS 4
+#define DEFAULT_FLOOR -1
 
 /**
  * @brief Movement type used in @c hardware_command_movement.
@@ -69,6 +70,14 @@ int hardware_read_obstruction_signal();
  * @return 1 if the elevator is at @p floor, otherwise 0;
  */
 int hardware_read_floor_sensor(int floor);
+
+/**
+ * @brief Reads what floor we are in
+ *
+ *
+ * @return the floor if we are in a defined floor, DEFAULT_FLOOR otherwise
+ */
+int hardware_read_floor();
 
 /**
  * @brief Polls the hardware for the status of orders from

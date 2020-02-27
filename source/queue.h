@@ -92,9 +92,6 @@ void queue_set_destination(QueueState *p_queue);
 
 void queue_if_destination_reached_set_deafult(QueueState *p_queue);
 
-//Må doxes
-int read_floor();
-
 #endif
 
 //kan jeg refere til variable her?
