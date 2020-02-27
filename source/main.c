@@ -22,7 +22,7 @@ int main(){
 
     signal(SIGINT, sigint_handler);
     
-    elevator_fsm2();
+    elevator_fsm();
 
 
     return 0;

@@ -4,7 +4,7 @@
 #include <time.h>
 #include <stdlib.h>
 
-void elevator_fsm2() {
+void elevator_fsm() {
     sethw_start_procedure_elevator();
     
     QueueState * p_queue = (QueueState*) malloc(sizeof(*p_queue));
