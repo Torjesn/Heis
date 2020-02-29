@@ -119,13 +119,6 @@ int hardware_read_floor_sensor(int floor){
     return io_read_bit(floor_bit);
 }
 
-int hardware_read_floor() {
-    for (int floor = 0; floor <  HARDWARE_NUMBER_OF_FLOORS; ++floor ) {
-        if(hardware_read_floor_sensor(floor)) return floor;
-    }
-    return DEFAULT_FLOOR;
-}
-
 int hardware_read_order(int floor, HardwareOrder order_type){
     if(!hardware_legal_floor(floor, order_type)){
         return 0;
@@ -197,4 +190,11 @@ void hardware_command_order_light(int floor, HardwareOrder order_type, int on){
     else{
         io_clear_bit(light_bit_lookup[floor][type_bit]);
     }
+}
+
+int hardware_read_floor() {
+    for (int floor = 0; floor <  HARDWARE_NUMBER_OF_FLOORS; ++floor ) {
+        if(hardware_read_floor_sensor(floor)) return floor;
+    }
+    return DEFAULT_FLOOR;
 }
