@@ -22,16 +22,15 @@ typedef struct {
     int order_down[HARDWARE_NUMBER_OF_FLOORS]; /** < Array for the orders going down from the outside */
     int order_inside[HARDWARE_NUMBER_OF_FLOORS]; /** < Orders from the inside */
     int saved_floor; /** < Holds the current floor, with the states between aswell*/
-    int current_floor;
-    int destination;
+    int current_floor; /** < Holds the current floor, is DEFAULT_FLOOR between floors*/
+    int destination; /** < The floor furthest away in the right direction*/
     HardwareMovement preferred_motor_state; /** < What the queue wants the direction of the motor to be */
 } QueueState; 
 
 /** 
  * @brief Sets the current_floor state of the queue. 
  * Does not change between floors.
- * @param[out] p_queue.current_floor Current floor of the queue is set based on hardware. 
- * @param[out] p_queue.saved_floor State saving floor counter of the queue set based on hardware
+ * @param[out] p_queue, Current floor and saved floor of the queue is set based on hardware and s
 */
 
 void queue_get_current_floor(QueueState * p_queue);
@@ -47,7 +46,7 @@ void queue_default_init(QueueState * p_queue);
 /**
  * @brief Removes the orders of the current floor in the queue
  * 
- * @param[out] p_queue The queue arrays are set to zero at current floor //based on current floor skal vi si det?
+ * @param[out] p_queue The queue arrays are set to zero at the current floor
  */
 void queue_remove_orders_current_floor(QueueState * p_queue);
 
@@ -62,15 +61,15 @@ int queue_check_if_stop_floor(QueueState * p_queue);
 /**
  * @brief Sets the elevator input on one of the queue arrays.
  * @param[out] p_queue Sets the queue arrays based on harware input, current_floor state and prefered_motor_state state of the queue.
- * Orders will not be taken if the elevator is at a floor, and have a wanted motor direction
+ * @warning Orders will not be taken if the elevator is at a floor, and have a wanted motor direction
 */
 
 void queue_get_user_input(QueueState * p_queue);
 
 /**
  * @brief Checks if the queue has any orders, and sets the motor state accordingly to reach them.
- * @param[out] p_queue.preferred_motor_state Sets prefered motor state based on the queue
  * @param[in] p_queue Compares the floor_arrays and saved_floor state to find prefered motorstate
+ * @param[out] p_queue.preferred_motor_state Sets prefered motor state based on the queue
  */
 void queue_set_preferred_motor_state(QueueState * p_queue);
 
@@ -78,20 +77,17 @@ void queue_set_preferred_motor_state(QueueState * p_queue);
 /**
  * @brief Sets the destionation of the elevator to the floor the furthest away
  * based on the prefered motor state
- * @param[out] p_queue.preferred_motor_state Sets destination based on the queue
  * @param[in] p_queue Compares the floor_arrays and the prefered_motor_state state to find destination
+ * @param[out] p_queue.preferred_motor_state Sets destination based on the queue
  */
 void queue_set_destination(QueueState *p_queue);
 
 
 /**
  * @brief Sets the destionation to deafult if reached
- * @param[in,out] p_queue.destination Sets destination based on current floor
- * @param[in] p_queue.current_floor Compared to destination
+ * @param[in,out] p_queue  Sets destination based on current floor
  */
 
 void queue_if_destination_reached_set_deafult(QueueState *p_queue);
 
 #endif
-
-//kan jeg refere til variable her?

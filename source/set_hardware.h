@@ -16,7 +16,7 @@ typedef enum {
 
 
 /**
- * @brief The elevator will go down until it sees a valid floor
+ * @brief  The start procedure, the elevator goes down until it sees a valid floor
 */
 
 void sethw_start_procedure_elevator();

@@ -125,8 +125,6 @@ void hardware_command_order_light(int floor, HardwareOrder order_type, int on);
 
 /**
  * @brief Reads what floor we are in
- *
- *
  * @return the floor if we are in a defined floor, DEFAULT_FLOOR otherwise
  */
 int hardware_read_floor();
