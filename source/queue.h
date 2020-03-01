@@ -61,7 +61,7 @@ int queue_check_if_stop_floor(QueueState * p_queue);
 /**
  * @brief Sets the elevator input on one of the queue arrays.
  * @param[out] p_queue Sets the queue arrays based on harware input, current_floor state and prefered_motor_state state of the queue.
- * @warning Orders will not be taken if the elevator is at a floor, and have a wanted motor direction
+ * @warning Orders at the same floor we are in will not be added to the queue, because they will be taken automatically 
 */
 
 void queue_get_user_input(QueueState * p_queue);
