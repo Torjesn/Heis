@@ -68,8 +68,7 @@ void queue_get_user_input(QueueState * p_queue);
 
 /**
  * @brief Checks if the queue has any orders, and sets the motor state accordingly to reach them.
- * @param[in] p_queue Compares the floor_arrays and saved_floor state to find prefered motorstate
- * @param[out] p_queue.preferred_motor_state Sets prefered motor state based on the queue
+ * @param[in, out] p_queue Compares the floor_arrays and saved_floor state to find prefered motorstate, and sets that motor state
  */
 void queue_set_preferred_motor_state(QueueState * p_queue);
 
@@ -77,17 +76,15 @@ void queue_set_preferred_motor_state(QueueState * p_queue);
 /**
  * @brief Sets the destionation of the elevator to the floor the furthest away
  * based on the prefered motor state
- * @param[in] p_queue Compares the floor_arrays and the prefered_motor_state state to find destination
- * @param[out] p_queue.preferred_motor_state Sets destination based on the queue
+ * @param[in, out] p_queue Compares the floor_arrays and the prefered_motor_state state to find destination, and sets the destination
  */
 void queue_set_destination(QueueState *p_queue);
 
 
 /**
- * @brief Sets the destionation to deafult if reached
+ * @brief Sets the destionation to DEFAULT_FLOOR if reached, else current floor
  * @param[in,out] p_queue  Sets destination based on current floor
  */
-
 void queue_if_destination_reached_set_deafult(QueueState *p_queue);
 
 #endif

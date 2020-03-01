@@ -1,5 +1,5 @@
 /** @file 
- * @brief A file with all the hardware-functions we use
+ * @brief Functions with logic that mainly writes to hardware
  * */
 #ifndef SET_HARDWARE
 #define SET_HARDWARE
@@ -44,7 +44,7 @@ void sethw_try_close_door(DoorState* p_door, clock_t* p_door_open_timer);
 /**
  * @brief Writes to the motor based on the state of the door and the wishes of the queue
  * @param[in] p_door The motor will halt if door is open
- * @param[in] p_queue.prefered_motor_state If door is closed, the motor will follow wishes of the queue
+ * @param[in] p_queue If door is closed, the motor will follow wishes of the queue
  */
 void sethw_motor(DoorState* p_door, QueueState* p_queue);
 
